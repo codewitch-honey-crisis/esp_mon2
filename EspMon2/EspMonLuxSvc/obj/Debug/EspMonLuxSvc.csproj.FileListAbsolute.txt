@@ -1,0 +1,13 @@
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\bin\Debug\EspMonLuxSvc.exe.config
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\bin\Debug\EspMonLuxSvc.exe
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\bin\Debug\EspMonLuxSvc.pdb
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\bin\Debug\OpenHardwareMonitorLib.dll
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\bin\Debug\OpenHardwareMonitorLib.pdb
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.csproj.AssemblyReference.cache
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.csproj.SuggestedBindingRedirects.cache
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.MainService.resources
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.csproj.GenerateResource.cache
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.csproj.CoreCompileInputs.cache
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.csproj.CopyComplete
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.exe
+C:\Users\gazto\source\repos\EspMonLux\EspMonLuxSvc\obj\Debug\EspMonLuxSvc.pdb
