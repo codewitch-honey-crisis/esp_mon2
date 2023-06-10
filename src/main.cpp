@@ -1,15 +1,12 @@
-#define LCD_HRES 480
-#define LCD_VRES 320
-
 #include <Arduino.h>
-#include <lcd_controller.h>
+#define LCD_IMPLEMENTATION
+#include <lcd_init.h>
 #include <uix.hpp>
 using namespace gfx;
 using namespace uix;
 #include <ui.hpp>
 #include <interface.hpp>
-using screen_t = screen<LCD_HRES, LCD_VRES, rgb_pixel<16>>;
-esp_lcd_panel_handle_t lcd_handle;
+
 char cpu_sz[32];
 char gpu_sz[32];
     
@@ -20,31 +17,28 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io
 }
 static void uix_flush(point16 location, typename screen_t::bitmap_type& bmp, void* state) {
     int x1 = location.x, y1 = location.y, x2 = location.x + bmp.dimensions().width - 1, y2 = location.y + bmp.dimensions().height - 1;
-    lcd_flush(x1, y1, x2, y2, bmp.begin());
-}
-
-void lcd_panel_init() {
-    lcd_color_trans_done_register_cb(lcd_flush_ready, nullptr);
-    lcd_init(lcd_buffer_size);
+    lcd_panel_draw_bitmap(x1, y1, x2, y2, bmp.begin());
 }
 
 void setup() {
     Serial.begin(115200);
-    USBSerial.begin(115200);
-    lcd_panel_init();
+    lcd_panel_init(lcd_buffer_size,lcd_flush_ready);
     main_screen_init(uix_flush);
-    
+#ifdef T_DISPLAY_S3
+    pinMode(15, OUTPUT); 
+    digitalWrite(15, HIGH);
+#endif // T_DISPLAY_S3
 }
 void loop() {
     main_screen.update();
-    Stream* stm = Serial.available()?(Stream*)&Serial:&USBSerial;
-    int i = stm->read();
+
+    int i = Serial.read();
     float tmp;
     if(i>-1) {
         switch(i) {
             case read_status::command: {
                 read_status data;
-                if(sizeof(data)==stm->readBytes((uint8_t*)&data,sizeof(data))) {
+                if(sizeof(data)==Serial.readBytes((uint8_t*)&data,sizeof(data))) {
                     // update the display
                     if (cpu_buffers[0].full()) {
                         cpu_buffers[0].get(&tmp);
@@ -83,13 +77,14 @@ void loop() {
                     gpu_temp_label.text(gpu_sz);
                     
                 } else {
-                    while(-1!=stm->read());
+                    while(-1!=Serial.read());
                 }
             }
             break;
             default:
-                while(-1!=stm->read());
+                while(-1!=Serial.read());
                 break;
         };
     }
+
 }

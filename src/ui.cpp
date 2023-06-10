@@ -129,14 +129,15 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     main_screen.background_color(color16_t::black);
     main_screen.on_flush_callback(flush_callback,flush_callback_state);
     
-    cpu_label.bounds({10,10,89,49});
+    cpu_label.text("CPU");
+    cpu_label.text_line_height(main_screen.dimensions().height/10);
+    cpu_label.bounds(text_font.measure_text(ssize16::max(),spoint16::zero(),cpu_label.text(),text_font.scale(cpu_label.text_line_height())).bounds().offset(5,5).inflate(8,4));
     cpu_label.text_color(color32_t::white);
     cpu_label.background_color(transparent);
     cpu_label.border_color(transparent);
-    cpu_label.text("CPU");
     cpu_label.text_justify(uix_justify::bottom_right);
     cpu_label.text_open_font(&text_font);
-    cpu_label.text_line_height(25);
+    
     main_screen.register_control(cpu_label);
 
     cpu_temp_label.bounds(cpu_label.bounds().offset(0,cpu_label.text_line_height()+1));
@@ -146,7 +147,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     cpu_temp_label.text("0C");
     cpu_temp_label.text_justify(uix_justify::bottom_right);
     cpu_temp_label.text_open_font(&text_font);
-    cpu_temp_label.text_line_height(25);
+    cpu_temp_label.text_line_height(cpu_label.text_line_height());
     main_screen.register_control(cpu_temp_label);
 
     cpu_bar.bounds({int16_t(cpu_label.bounds().x2+5),cpu_label.bounds().y1,int16_t(main_screen.dimensions().width-5),cpu_label.bounds().y2});
@@ -156,7 +157,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     cpu_bar.on_paint(draw_bar,&cpu_bar_state);
     main_screen.register_control(cpu_bar);
 
-    cpu_graph.bounds({cpu_label.bounds().x1,int16_t(cpu_label.bounds().y2+5),cpu_bar.bounds().x2,int16_t(main_screen.dimensions().height/2-5)});
+    cpu_graph.bounds({cpu_bar.bounds().x1,int16_t(cpu_label.bounds().y2+5),cpu_bar.bounds().x2,int16_t(main_screen.dimensions().height/2-5)});
     cpu_graph_state.size = 2;
     cpu_graph_state.colors = cpu_colors;
     cpu_graph_state.buffers = cpu_buffers;
@@ -170,7 +171,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     gpu_label.text("GPU");
     gpu_label.text_justify(uix_justify::bottom_right);
     gpu_label.text_open_font(&text_font);
-    gpu_label.text_line_height(25);
+    gpu_label.text_line_height(cpu_label.text_line_height());
     main_screen.register_control(gpu_label);
 
     gpu_temp_label.bounds(gpu_label.bounds().offset(0,gpu_label.text_line_height()+1));
@@ -180,7 +181,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     gpu_temp_label.text("0C");
     gpu_temp_label.text_justify(uix_justify::bottom_right);
     gpu_temp_label.text_open_font(&text_font);
-    gpu_temp_label.text_line_height(25);
+    gpu_temp_label.text_line_height(cpu_label.text_line_height());
     main_screen.register_control(gpu_temp_label);
 
     gpu_bar.bounds({int16_t(gpu_label.bounds().x2+5),gpu_label.bounds().y1,int16_t(main_screen.dimensions().width-5),gpu_label.bounds().y2});
