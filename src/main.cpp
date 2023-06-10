@@ -27,7 +27,10 @@ void setup() {
 #ifdef T_DISPLAY_S3
     pinMode(15, OUTPUT); 
     digitalWrite(15, HIGH);
-#endif // T_DISPLAY_S3
+#elif defined(S3_T_QT_PRO)
+    pinMode(4, OUTPUT); 
+    digitalWrite(4, HIGH);
+#endif
 }
 void loop() {
     main_screen.update();
