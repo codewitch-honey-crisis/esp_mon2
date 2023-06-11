@@ -86,6 +86,7 @@ namespace EspMon
 
 		private void RefreshButton_Click(object sender, EventArgs e)
 		{
+			StartedCheckBox.Checked = false;
 			RefreshPortList();
 		}
 

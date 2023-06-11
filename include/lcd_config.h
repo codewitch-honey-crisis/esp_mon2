@@ -285,8 +285,8 @@
 #define LCD_VRES 128
 #define LCD_COLOR_SPACE ESP_LCD_COLOR_SPACE_BGR
 #define LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
-#define LCD_GAP_X 0
-#define LCD_GAP_Y 0
+#define LCD_GAP_X 2
+#define LCD_GAP_Y 1
 #define LCD_MIRROR_X true
 #define LCD_MIRROR_Y true
 #define LCD_INVERT_COLOR true
