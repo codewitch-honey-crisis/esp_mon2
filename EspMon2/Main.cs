@@ -103,12 +103,18 @@ namespace EspMon
 				data.GpuTempMax = (byte)gpuTjMax;
 				try
 				{
-					_port.Open();
-					var ba = new byte[] { 1 };
-					_port.Write(ba, 0, ba.Length);
-					_port.WriteStruct(data);
-					_port.BaseStream.Flush();
-					_port.Close();
+					if (StartedCheckBox.Checked)
+					{
+
+						_port.Open();
+						var ba = new byte[] { 1 };
+						_port.Write(ba, 0, ba.Length);
+
+						_port.WriteStruct(data);
+						_port.BaseStream.Flush();
+						_port.Close();
+					}
+	
 				}
 				catch { }
 				

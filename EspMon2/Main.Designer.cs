@@ -34,7 +34,7 @@ namespace EspMon
 			this.RefreshButton = new System.Windows.Forms.Button();
 			this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
 			this.Notify = new System.Windows.Forms.NotifyIcon(this.components);
-			this.Log = new System.Windows.Forms.TextBox();
+			this.StartedCheckBox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// PortCombo
@@ -74,32 +74,28 @@ namespace EspMon
 			this.Notify.Text = "EspMon";
 			this.Notify.Click += new System.EventHandler(this.Notify_Click);
 			// 
-			// Log
+			// StartedCheckBox
 			// 
-			this.Log.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.Log.Location = new System.Drawing.Point(12, 40);
-			this.Log.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.Log.Multiline = true;
-			this.Log.Name = "Log";
-			this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.Log.Size = new System.Drawing.Size(281, 1);
-			this.Log.TabIndex = 3;
-			this.Log.TabStop = false;
+			this.StartedCheckBox.AutoSize = true;
+			this.StartedCheckBox.Location = new System.Drawing.Point(12, 39);
+			this.StartedCheckBox.Name = "StartedCheckBox";
+			this.StartedCheckBox.Size = new System.Drawing.Size(72, 20);
+			this.StartedCheckBox.TabIndex = 3;
+			this.StartedCheckBox.Text = "Started";
+			this.StartedCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(307, 48);
-			this.Controls.Add(this.Log);
+			this.ClientSize = new System.Drawing.Size(307, 65);
+			this.Controls.Add(this.StartedCheckBox);
 			this.Controls.Add(this.RefreshButton);
 			this.Controls.Add(this.PortCombo);
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(325, 95);
-			this.MinimumSize = new System.Drawing.Size(325, 95);
+			this.MaximumSize = new System.Drawing.Size(325, 112);
+			this.MinimumSize = new System.Drawing.Size(325, 112);
 			this.Name = "Main";
 			this.Text = "EspMon";
 			this.Resize += new System.EventHandler(this.EspMon_Resize);
@@ -114,7 +110,7 @@ namespace EspMon
 		private System.Windows.Forms.Button RefreshButton;
 		private System.Windows.Forms.Timer UpdateTimer;
 		private System.Windows.Forms.NotifyIcon Notify;
-		private System.Windows.Forms.TextBox Log;
+		private System.Windows.Forms.CheckBox StartedCheckBox;
 	}
 }
 
