@@ -7,9 +7,10 @@ using namespace uix;
 #include <ui.hpp>
 #include <interface.hpp>
 
-char cpu_sz[32];
-char gpu_sz[32];
-    
+static char cpu_sz[32];
+static char gpu_sz[32];
+
+static uint32_t timeout_ts = 0;
 
 static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t* edata, void* user_ctx) {
     main_screen.set_flush_complete();
@@ -33,11 +34,19 @@ void setup() {
 #endif
 }
 void loop() {
+    if(timeout_ts!=0 && millis()>timeout_ts+1000) {
+        timeout_ts = 0;
+        disconnected_label.visible(true);
+        disconnected_svg.visible(true);
+    }
     main_screen.update();
 
     int i = Serial.read();
     float tmp;
     if(i>-1) {
+        timeout_ts = millis();
+        disconnected_label.visible(false);
+        disconnected_svg.visible(false);
         switch(i) {
             case read_status::command: {
                 read_status data;

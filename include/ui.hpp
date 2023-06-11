@@ -4,6 +4,7 @@
 #include <circular_buffer.hpp>
 using screen_t = uix::screen<LCD_VRES,LCD_HRES,gfx::rgb_pixel<16>>;
 using label_t = uix::label<typename screen_t::pixel_type,typename screen_t::palette_type>;
+using svg_box_t = uix::svg_box<typename screen_t::pixel_type,typename screen_t::palette_type>;
 using canvas_t = uix::canvas<typename screen_t::pixel_type,typename screen_t::palette_type>;
 using color16_t = gfx::color<gfx::rgb_pixel<16>>;
 using color32_t = gfx::color<gfx::rgba_pixel<32>>;
@@ -31,5 +32,8 @@ extern label_t gpu_label;
 extern label_t gpu_temp_label;
 extern canvas_t gpu_bar;
 extern canvas_t gpu_graph;
+
+extern label_t disconnected_label;
+extern svg_box_t disconnected_svg;
 
 extern void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flush_callback_state = nullptr);
