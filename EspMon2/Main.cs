@@ -106,8 +106,10 @@ namespace EspMon
 				{
 					if (StartedCheckBox.Checked)
 					{
-
-						_port.Open();
+						if (!_port.IsOpen)
+						{
+							_port.Open();
+						}
 						if (_port.WriteBufferSize - _port.BytesToWrite > 1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
 						{
 							var ba = new byte[] { 1 };
@@ -116,7 +118,7 @@ namespace EspMon
 							_port.WriteStruct(data);
 						}
 						_port.BaseStream.Flush();
-						_port.Close();
+						//_port.Close();
 					}
 	
 				}
