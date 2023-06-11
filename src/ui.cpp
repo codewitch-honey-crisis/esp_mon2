@@ -32,10 +32,15 @@ static void draw_bar(canvas_t::control_surface_type& destination, const gfx::sre
             h2-=32;
             auto range = abs(h2-h1)+1;
             int w = (int)ceilf(destination.dimensions().width/(float)range)+1;
+            int s=1;
+            if(destination.dimensions().width<range) {
+                w=1;
+                s=range/(float)destination.dimensions().width;
+            }
             int x = 0;
-            
-            for(auto j = h1;j<h2;++j) {
-                px.channel<channel_name::H>(range-(j-h1)-1+h1);
+            int c = 0;
+            for(auto j = 0;j<range;++j) {
+                px.channel<channel_name::H>(range-c-1+h1);
                 rect16 r(x,y,x+w,y+h);
                 if(x>=(v*destination.dimensions().width)) {
                     px.channel<channel_name::A>(95);
@@ -46,7 +51,7 @@ static void draw_bar(canvas_t::control_surface_type& destination, const gfx::sre
                 draw::filled_rectangle(destination,r,main_screen.background_color(),&clip);
                 draw::filled_rectangle(destination,r,col,&clip);
                 x+=w;
-                
+                c+=s;
             }
             
         } else {
