@@ -142,7 +142,6 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     cpu_label.border_color(transparent);
     cpu_label.text_justify(uix_justify::bottom_right);
     cpu_label.text_open_font(&text_font);
-    
     main_screen.register_control(cpu_label);
 
     cpu_temp_label.bounds(cpu_label.bounds().offset(0,cpu_label.text_line_height()+1));
