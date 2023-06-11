@@ -2,7 +2,7 @@
 #include <lcd_config.h>
 #include <uix.hpp>
 #include <circular_buffer.hpp>
-using screen_t = uix::screen<LCD_VRES,LCD_HRES,gfx::rgb_pixel<16>>;
+using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::rgb_pixel<16>>;
 using label_t = uix::label<typename screen_t::pixel_type,typename screen_t::palette_type>;
 using svg_box_t = uix::svg_box<typename screen_t::pixel_type,typename screen_t::palette_type>;
 using canvas_t = uix::canvas<typename screen_t::pixel_type,typename screen_t::palette_type>;

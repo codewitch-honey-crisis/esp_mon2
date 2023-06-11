@@ -108,10 +108,13 @@ namespace EspMon
 					{
 
 						_port.Open();
-						var ba = new byte[] { 1 };
-						_port.Write(ba, 0, ba.Length);
+						if (_port.WriteBufferSize - _port.BytesToWrite > 1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
+						{
+							var ba = new byte[] { 1 };
+							_port.Write(ba, 0, ba.Length);
 
-						_port.WriteStruct(data);
+							_port.WriteStruct(data);
+						}
 						_port.BaseStream.Flush();
 						_port.Close();
 					}
