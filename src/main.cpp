@@ -48,7 +48,7 @@ void setup() {
 #ifdef T_DISPLAY_S3
     pinMode(15, OUTPUT); 
     digitalWrite(15, HIGH);
-#elif defined(S3_T_QT_PRO)
+#elif defined(S3_T_QT)
     pinMode(4, OUTPUT); 
     digitalWrite(4, HIGH);
 #endif

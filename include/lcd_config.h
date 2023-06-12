@@ -269,7 +269,7 @@
 #define LCD_SWAP_XY true
 #endif // T_DISPLAY_S3
 
-#ifdef S3_T_QT_PRO
+#ifdef S3_T_QT
 #define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 0
@@ -291,7 +291,7 @@
 #define LCD_MIRROR_Y true
 #define LCD_INVERT_COLOR true
 #define LCD_SWAP_XY false
-#endif // S3_T_QT_PRO
+#endif // S3_T_QT
 
 #ifdef M5STACK_S3_ATOM
 #define MONITOR Serial
