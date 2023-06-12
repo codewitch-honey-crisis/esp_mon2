@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
 using OpenHardwareMonitor.Hardware;
 using System.Collections.Generic;
-using System.Management;
-using System.Diagnostics;
-using System.Linq;
-using static EspMon.Main;
 
 namespace EspMon
 {
@@ -23,18 +18,13 @@ namespace EspMon
 			public void VisitHardware(IHardware hardware)
 			{
 				hardware.Update();
-				foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
+				foreach (IHardware subHardware in hardware.SubHardware) 
+					subHardware.Accept(this);
 			}
 			public void VisitSensor(ISensor sensor) { }
 			public void VisitParameter(IParameter parameter) { }
 		}
-		// local members for system info
-		float cpuUsage;
-		float gpuUsage;
-		float cpuTemp;
-		float cpuTjMax;
-		float gpuTemp;
-		float gpuTjMax;
+		// list item that holds a com port
 		struct PortData
 		{
 			public SerialPort Port;
@@ -63,6 +53,13 @@ namespace EspMon
 				return Port.GetHashCode();
 			}
 		}
+		// local members for system info
+		float cpuUsage;
+		float gpuUsage;
+		float cpuTemp;
+		float cpuTjMax;
+		float gpuTemp;
+		float gpuTjMax;
 		private readonly Computer _computer = new Computer
 		{
 			CPUEnabled = true,
@@ -76,11 +73,6 @@ namespace EspMon
 			Show();
 			RefreshPortList();
 			_computer.Open();
-		}
-		public float CpuTempMax {
-			get {
-				return 0;
-			}
 		}
 		protected override void OnClosed(EventArgs e)
 		{
