@@ -35,8 +35,34 @@ namespace EspMon
 		float gpuTjMax;
 		float cpuSpeed;
 		float gpuSpeed;
+		struct PortData
+		{
+			public SerialPort Port;
+			public PortData(SerialPort port)
+			{
+				Port = port;
+			}
+			public override string ToString()
+			{
+				if(Port!=null)
+				{
+					return Port.PortName;
+				}
+				return "<null>";
+			}
+			public override bool Equals(object obj)
+			{
+				if(!(obj is PortData)) return false;
+				PortData other = (PortData)obj;
+				return object.Equals(Port, other.Port);
+			}
+			public override int GetHashCode()
+			{
+				if(Port==null) return 0;
 
-		private SerialPort _port;
+				return Port.GetHashCode();
+			}
+		}
 		private readonly Computer _computer = new Computer
 		{
 			CPUEnabled = true,
@@ -45,6 +71,7 @@ namespace EspMon
 		public Main()
 		{
 			InitializeComponent();
+			
 			Notify.Icon = System.Drawing.SystemIcons.Information;
 			Show();
 			RefreshPortList();
@@ -62,26 +89,36 @@ namespace EspMon
 		}
 		void RefreshPortList()
 		{
-			var p = PortCombo.Text;
-			PortCombo.Items.Clear();
-			var ports = SerialPort.GetPortNames();
-			foreach(var port in ports)
+			var ports = new List<SerialPort>();
+			foreach(var item in PortBox.CheckedItems)
 			{
-				PortCombo.Items.Add(port);
+				ports.Add(((PortData)item).Port); 
 			}
-			var idx = PortCombo.Items.Count-1;
-			if(!string.IsNullOrWhiteSpace(p))
+			PortBox.Items.Clear();
+			var names = SerialPort.GetPortNames();
+			foreach(var name in names)
 			{
-				for(var i = 0; i < PortCombo.Items.Count; ++i)
+				SerialPort found = null;
+				foreach(var ep in ports)
 				{
-					if(p==(string)PortCombo.Items[i])
-					{
-						idx = i;
+					if(ep.PortName==name) {
+						found = ep;
 						break;
 					}
 				}
+				var chk = false;
+				if (found == null) {
+					found = new SerialPort(name, 115200);
+				} else
+				{
+					chk = true;
+				}
+				PortBox.Items.Add(new PortData(found));
+				if(chk)
+				{
+					PortBox.SetItemChecked(PortBox.Items.IndexOf(new PortData(found)), true);
+				}
 			}
-            PortCombo.SelectedIndex = 0;
 		}
 
 		private void RefreshButton_Click(object sender, EventArgs e)
@@ -93,38 +130,54 @@ namespace EspMon
 		private void UpdateTimer_Tick(object sender, EventArgs e)
 		{
             CollectSystemInfo();
-			if(_port!=null)
+			ReadStatus data;
+			data.CpuTemp = (byte)cpuTemp;
+			data.CpuUsage = (byte)cpuUsage;
+			data.GpuTemp = (byte)gpuTemp;
+			data.GpuUsage = (byte)gpuUsage;
+			data.CpuTempMax = (byte)cpuTjMax;
+			data.GpuTempMax = (byte)gpuTjMax;
+		
+			if (StartedCheckBox.Checked)
 			{
-				ReadStatus data;
-				data.CpuTemp = (byte)cpuTemp;
-				data.CpuUsage = (byte)cpuUsage;
-				data.GpuTemp = (byte)gpuTemp;
-				data.GpuUsage = (byte)gpuUsage;
-				data.CpuTempMax = (byte)cpuTjMax;
-				data.GpuTempMax = (byte)gpuTjMax;
-				try
+				int i = 0;
+				foreach(PortData pdata in PortBox.Items)
 				{
-					if (StartedCheckBox.Checked)
+					var port = pdata.Port;
+					if (PortBox.GetItemChecked(i))
 					{
-						if (!_port.IsOpen)
+						try
 						{
-							_port.Open();
-						}
-						if (_port.WriteBufferSize - _port.BytesToWrite > 1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
-						{
-							var ba = new byte[] { 1 };
-							_port.Write(ba, 0, ba.Length);
+							if (!port.IsOpen)
+							{
+								port.Open();
+							}
+							if (port.WriteBufferSize - port.BytesToWrite > 1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
+							{
+								var ba = new byte[] { 1 };
+								port.Write(ba, 0, ba.Length);
 
-							_port.WriteStruct(data);
+								port.WriteStruct(data);
+							}
+							port.BaseStream.Flush();
 						}
-						_port.BaseStream.Flush();
-						//_port.Close();
+						catch { }
 					}
-	
+					else
+					{
+						if (port.IsOpen)
+						{
+							try { port.Close(); } catch { }
+						}
+					}
+					++i;
 				}
-				catch { }
+						
+				//_port.Close();
+			} 
+	
 				
-			}
+			
 		}
 
 
@@ -195,16 +248,6 @@ namespace EspMon
 			//System.Diagnostics.Debug.WriteLine(_computer.GetReport());
         }
 
-        private void PortCombo_SelectedIndexChanged(object sender, EventArgs e)
-		{
-            if(_port!=null && _port.IsOpen)
-			{
-                _port.Close();
-			}
-            _port = new SerialPort(((ComboBox)sender).Text,115200);
-            _port.Encoding = Encoding.ASCII;
-		}
-
 		private void EspMon_Resize(object sender, EventArgs e)
 		{
             if(WindowState==FormWindowState.Minimized)
@@ -221,5 +264,6 @@ namespace EspMon
             WindowState = FormWindowState.Normal;
             Activate();
         }
-    }
+
+	}
 }
