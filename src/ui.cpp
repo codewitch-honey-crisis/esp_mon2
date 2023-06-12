@@ -216,7 +216,12 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback, void* flu
     disconnected_label.background_color(color32_t::white);
     disconnected_label.border_color(color32_t::white);
     main_screen.register_control(disconnected_label);
-    const float sscale = disconnected_icon.scale(main_screen.dimensions());
+    float sscale;
+    if(main_screen.dimensions().width<128 || main_screen.dimensions().height<128) {
+        sscale = disconnected_icon.scale(main_screen.dimensions());
+    } else {
+        sscale = disconnected_icon.scale(size16(128,128));
+    }
     disconnected_svg.bounds(srect16(0,0,disconnected_icon.dimensions().width*sscale-1,disconnected_icon.dimensions().height*sscale-1).center(main_screen.bounds()));
     disconnected_svg.doc(&disconnected_icon);
     main_screen.register_control(disconnected_svg);
