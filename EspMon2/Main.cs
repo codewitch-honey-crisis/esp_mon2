@@ -65,31 +65,6 @@ namespace EspMon
 			CPUEnabled = true,
 			GPUEnabled = true
 		};
-		public Main()
-		{
-			InitializeComponent();
-
-			Notify.Icon = System.Drawing.SystemIcons.Information;
-			Show();
-			RefreshPortList();
-			_computer.Open();
-		}
-		protected override void OnClosed(EventArgs e)
-		{
-			base.OnClosed(e);
-			foreach (PortData portData in PortBox.CheckedItems)
-			{
-				try
-				{
-					if (portData.Port != null && portData.Port.IsOpen)
-					{
-						portData.Port.Close();
-					}
-				}
-				catch { }
-			}
-			_computer.Close();
-		}
 		// Populates the PortBox control with COM ports
 		void RefreshPortList()
 		{
@@ -134,11 +109,6 @@ namespace EspMon
 						PortBox.Items.IndexOf(new PortData(found)), true);
 				}
 			}
-		}
-		private void RefreshButton_Click(object sender, EventArgs e)
-		{
-			StartedCheckBox.Checked = false;
-			RefreshPortList();
 		}
 		private void UpdateTimer_Tick(object sender, EventArgs e)
 		{
@@ -253,7 +223,27 @@ namespace EspMon
 				}
 			}
 		}
-
+		protected override void OnClosed(EventArgs e)
+		{
+			base.OnClosed(e);
+			foreach (PortData portData in PortBox.CheckedItems)
+			{
+				try
+				{
+					if (portData.Port != null && portData.Port.IsOpen)
+					{
+						portData.Port.Close();
+					}
+				}
+				catch { }
+			}
+			_computer.Close();
+		}
+		private void RefreshButton_Click(object sender, EventArgs e)
+		{
+			StartedCheckBox.Checked = false;
+			RefreshPortList();
+		}
 		private void EspMon_Resize(object sender, EventArgs e)
 		{
 			// hide the window to the tray on minimize
@@ -282,6 +272,15 @@ namespace EspMon
 				try { if (port.IsOpen) port.Close(); } catch { }
 
 			}
+		}
+		public Main()
+		{
+			InitializeComponent();
+
+			Notify.Icon = System.Drawing.SystemIcons.Information;
+			Show();
+			RefreshPortList();
+			_computer.Open();
 		}
 	}
 }
