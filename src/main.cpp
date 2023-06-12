@@ -108,8 +108,6 @@ void loop() {
                 while(-1!=Serial.read());
                 break;
         };
-    } else {
-        Serial.write(0x2c);
     }
 
 }
