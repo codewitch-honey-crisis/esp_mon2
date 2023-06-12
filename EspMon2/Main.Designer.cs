@@ -40,7 +40,7 @@ namespace EspMon
 			// 
 			// RefreshButton
 			// 
-			this.RefreshButton.Location = new System.Drawing.Point(84, 6);
+			this.RefreshButton.Location = new System.Drawing.Point(93, 6);
 			this.RefreshButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.RefreshButton.Name = "RefreshButton";
 			this.RefreshButton.Size = new System.Drawing.Size(86, 30);
@@ -64,7 +64,7 @@ namespace EspMon
 			// StartedCheckBox
 			// 
 			this.StartedCheckBox.AutoSize = true;
-			this.StartedCheckBox.Location = new System.Drawing.Point(182, 10);
+			this.StartedCheckBox.Location = new System.Drawing.Point(198, 9);
 			this.StartedCheckBox.Name = "StartedCheckBox";
 			this.StartedCheckBox.Size = new System.Drawing.Size(72, 20);
 			this.StartedCheckBox.TabIndex = 3;
@@ -88,20 +88,21 @@ namespace EspMon
 			this.PortBox.FormattingEnabled = true;
 			this.PortBox.Location = new System.Drawing.Point(16, 50);
 			this.PortBox.Name = "PortBox";
-			this.PortBox.Size = new System.Drawing.Size(238, 140);
+			this.PortBox.Size = new System.Drawing.Size(254, 140);
 			this.PortBox.TabIndex = 6;
+			this.PortBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.PortBox_ItemCheck);
 			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(265, 197);
+			this.ClientSize = new System.Drawing.Size(281, 197);
 			this.Controls.Add(this.PortBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.StartedCheckBox);
 			this.Controls.Add(this.RefreshButton);
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.MinimumSize = new System.Drawing.Size(283, 244);
+			this.MinimumSize = new System.Drawing.Size(299, 244);
 			this.Name = "Main";
 			this.Text = "EspMon";
 			this.Resize += new System.EventHandler(this.EspMon_Resize);

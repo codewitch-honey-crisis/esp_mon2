@@ -129,17 +129,18 @@ namespace EspMon
 
 		private void UpdateTimer_Tick(object sender, EventArgs e)
 		{
-            CollectSystemInfo();
-			ReadStatus data;
-			data.CpuTemp = (byte)cpuTemp;
-			data.CpuUsage = (byte)cpuUsage;
-			data.GpuTemp = (byte)gpuTemp;
-			data.GpuUsage = (byte)gpuUsage;
-			data.CpuTempMax = (byte)cpuTjMax;
-			data.GpuTempMax = (byte)gpuTjMax;
-		
+            
 			if (StartedCheckBox.Checked)
 			{
+				CollectSystemInfo();
+				ReadStatus data;
+				data.CpuTemp = (byte)cpuTemp;
+				data.CpuUsage = (byte)cpuUsage;
+				data.GpuTemp = (byte)gpuTemp;
+				data.GpuUsage = (byte)gpuUsage;
+				data.CpuTempMax = (byte)cpuTjMax;
+				data.GpuTempMax = (byte)gpuTjMax;
+
 				int i = 0;
 				foreach(PortData pdata in PortBox.Items)
 				{
@@ -265,5 +266,14 @@ namespace EspMon
             Activate();
         }
 
+		private void PortBox_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			if(e.Index>=0 && e.NewValue!=CheckState.Checked)
+			{
+				var port = ((PortData)PortBox.Items[e.Index]).Port;
+				try { if (port.IsOpen) port.Close(); } catch { }
+				
+			}
+		}
 	}
 }
