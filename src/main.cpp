@@ -33,7 +33,6 @@ static void uix_flush(point16 location, typename screen_t::bitmap_type& bmp, voi
 #endif
 }
 
-
 void setup() {
     Serial.begin(115200);
     // RGB interface LCD init is slightly different
@@ -53,6 +52,7 @@ void setup() {
     digitalWrite(4, HIGH);
 #endif
 }
+
 void loop() {
     // timeout for disconnection detection (1 second)
     if(timeout_ts!=0 && millis()>timeout_ts+1000) {
@@ -72,8 +72,8 @@ void loop() {
         disconnected_label.visible(false);
         disconnected_svg.visible(false);
         switch(i) {
-            case read_status::command: {
-                read_status data;
+            case read_status_t::command: {
+                read_status_t data;
                 if(sizeof(data)==Serial.readBytes((uint8_t*)&data,sizeof(data))) {
                     // update the CPU graph buffer (usage)
                     if (cpu_buffers[0].full()) {
@@ -133,5 +133,4 @@ void loop() {
                 break;
         };
     }
-
 }

@@ -1,7 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 namespace EspMon
 {
+	// the data to send over serial
+	// pack for 32-bit systems
 	[StructLayout(LayoutKind.Sequential,Pack = 4)]
 	internal struct ReadStatus
 	{

@@ -36,6 +36,12 @@ namespace EspMon
 			this.StartedCheckBox = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.PortBox = new System.Windows.Forms.CheckedListBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.CpuMaxUpDown = new System.Windows.Forms.NumericUpDown();
+			this.GpuMaxUpDown = new System.Windows.Forms.NumericUpDown();
+			this.label3 = new System.Windows.Forms.Label();
+			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// RefreshButton
@@ -64,7 +70,7 @@ namespace EspMon
 			// StartedCheckBox
 			// 
 			this.StartedCheckBox.AutoSize = true;
-			this.StartedCheckBox.Location = new System.Drawing.Point(198, 9);
+			this.StartedCheckBox.Location = new System.Drawing.Point(198, 13);
 			this.StartedCheckBox.Name = "StartedCheckBox";
 			this.StartedCheckBox.Size = new System.Drawing.Size(72, 20);
 			this.StartedCheckBox.TabIndex = 3;
@@ -74,7 +80,7 @@ namespace EspMon
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(13, 6);
+			this.label1.Location = new System.Drawing.Point(13, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(71, 16);
 			this.label1.TabIndex = 5;
@@ -86,17 +92,83 @@ namespace EspMon
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.PortBox.FormattingEnabled = true;
-			this.PortBox.Location = new System.Drawing.Point(16, 50);
+			this.PortBox.Location = new System.Drawing.Point(16, 101);
 			this.PortBox.Name = "PortBox";
-			this.PortBox.Size = new System.Drawing.Size(254, 140);
+			this.PortBox.Size = new System.Drawing.Size(254, 89);
 			this.PortBox.TabIndex = 6;
 			this.PortBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.PortBox_ItemCheck);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(16, 48);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(102, 16);
+			this.label2.TabIndex = 7;
+			this.label2.Text = "CPU Temp Max";
+			// 
+			// CpuMaxUpDown
+			// 
+			this.CpuMaxUpDown.Location = new System.Drawing.Point(125, 41);
+			this.CpuMaxUpDown.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+			this.CpuMaxUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.CpuMaxUpDown.Name = "CpuMaxUpDown";
+			this.CpuMaxUpDown.Size = new System.Drawing.Size(70, 22);
+			this.CpuMaxUpDown.TabIndex = 8;
+			this.CpuMaxUpDown.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			// 
+			// GpuMaxUpDown
+			// 
+			this.GpuMaxUpDown.Location = new System.Drawing.Point(125, 68);
+			this.GpuMaxUpDown.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+			this.GpuMaxUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.GpuMaxUpDown.Name = "GpuMaxUpDown";
+			this.GpuMaxUpDown.Size = new System.Drawing.Size(70, 22);
+			this.GpuMaxUpDown.TabIndex = 10;
+			this.GpuMaxUpDown.Value = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(16, 75);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(103, 16);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "GPU Temp Max";
 			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(281, 197);
+			this.Controls.Add(this.GpuMaxUpDown);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.CpuMaxUpDown);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.PortBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.StartedCheckBox);
@@ -106,6 +178,8 @@ namespace EspMon
 			this.Name = "Main";
 			this.Text = "EspMon";
 			this.Resize += new System.EventHandler(this.EspMon_Resize);
+			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -118,6 +192,10 @@ namespace EspMon
 		private System.Windows.Forms.CheckBox StartedCheckBox;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckedListBox PortBox;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.NumericUpDown CpuMaxUpDown;
+		private System.Windows.Forms.NumericUpDown GpuMaxUpDown;
+		private System.Windows.Forms.Label label3;
 	}
 }
 

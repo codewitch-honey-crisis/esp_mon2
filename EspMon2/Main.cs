@@ -13,6 +13,7 @@ namespace EspMon
 {
 	public partial class Main : Form
 	{
+		// traverses OHWM data
 		public class UpdateVisitor : IVisitor
 		{
 			public void VisitComputer(IComputer computer)
@@ -27,14 +28,13 @@ namespace EspMon
 			public void VisitSensor(ISensor sensor) { }
 			public void VisitParameter(IParameter parameter) { }
 		}
+		// local members for system info
 		float cpuUsage;
 		float gpuUsage;
 		float cpuTemp;
 		float cpuTjMax;
 		float gpuTemp;
 		float gpuTjMax;
-		float cpuSpeed;
-		float gpuSpeed;
 		struct PortData
 		{
 			public SerialPort Port;
@@ -44,7 +44,7 @@ namespace EspMon
 			}
 			public override string ToString()
 			{
-				if(Port!=null)
+				if (Port != null)
 				{
 					return Port.PortName;
 				}
@@ -52,13 +52,13 @@ namespace EspMon
 			}
 			public override bool Equals(object obj)
 			{
-				if(!(obj is PortData)) return false;
+				if (!(obj is PortData)) return false;
 				PortData other = (PortData)obj;
 				return object.Equals(Port, other.Port);
 			}
 			public override int GetHashCode()
 			{
-				if(Port==null) return 0;
+				if (Port == null) return 0;
 
 				return Port.GetHashCode();
 			}
@@ -71,7 +71,7 @@ namespace EspMon
 		public Main()
 		{
 			InitializeComponent();
-			
+
 			Notify.Icon = System.Drawing.SystemIcons.Information;
 			Show();
 			RefreshPortList();
@@ -85,54 +85,77 @@ namespace EspMon
 		protected override void OnClosed(EventArgs e)
 		{
 			base.OnClosed(e);
-            _computer.Close();
+			foreach (PortData portData in PortBox.CheckedItems)
+			{
+				try
+				{
+					if (portData.Port != null && portData.Port.IsOpen)
+					{
+						portData.Port.Close();
+					}
+				}
+				catch { }
+			}
+			_computer.Close();
 		}
+		// Populates the PortBox control with COM ports
 		void RefreshPortList()
 		{
+			// get the active ports
 			var ports = new List<SerialPort>();
-			foreach(var item in PortBox.CheckedItems)
+			foreach (var item in PortBox.CheckedItems)
 			{
-				ports.Add(((PortData)item).Port); 
+				ports.Add(((PortData)item).Port);
 			}
+			// reset the portbox
 			PortBox.Items.Clear();
 			var names = SerialPort.GetPortNames();
-			foreach(var name in names)
+			foreach (var name in names)
 			{
+				// check to see if the port is
+				// one of the checked ports
 				SerialPort found = null;
-				foreach(var ep in ports)
+				foreach (var ep in ports)
 				{
-					if(ep.PortName==name) {
+					if (ep.PortName == name)
+					{
 						found = ep;
 						break;
 					}
 				}
 				var chk = false;
-				if (found == null) {
+				if (found == null)
+				{
+					// create a new port
 					found = new SerialPort(name, 115200);
-				} else
+				}
+				else
 				{
 					chk = true;
 				}
 				PortBox.Items.Add(new PortData(found));
-				if(chk)
+				if (chk)
 				{
-					PortBox.SetItemChecked(PortBox.Items.IndexOf(new PortData(found)), true);
+					// if it's one of our previously
+					// checked ports, check it
+					PortBox.SetItemChecked(
+						PortBox.Items.IndexOf(new PortData(found)), true);
 				}
 			}
 		}
-
 		private void RefreshButton_Click(object sender, EventArgs e)
 		{
 			StartedCheckBox.Checked = false;
 			RefreshPortList();
 		}
-
 		private void UpdateTimer_Tick(object sender, EventArgs e)
 		{
-            
+			// only process if we're started
 			if (StartedCheckBox.Checked)
 			{
+				// gather the system info
 				CollectSystemInfo();
+				// put it in the struct for sending
 				ReadStatus data;
 				data.CpuTemp = (byte)cpuTemp;
 				data.CpuUsage = (byte)cpuUsage;
@@ -140,24 +163,29 @@ namespace EspMon
 				data.GpuUsage = (byte)gpuUsage;
 				data.CpuTempMax = (byte)cpuTjMax;
 				data.GpuTempMax = (byte)gpuTjMax;
-
+				// go through all the ports
 				int i = 0;
-				foreach(PortData pdata in PortBox.Items)
+				foreach (PortData pdata in PortBox.Items)
 				{
 					var port = pdata.Port;
+					// if it's checked
 					if (PortBox.GetItemChecked(i))
 					{
 						try
 						{
+							// open if necessary
 							if (!port.IsOpen)
 							{
 								port.Open();
 							}
-							if (port.WriteBufferSize - port.BytesToWrite > 1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
+							// if there's enough write buffer left
+							if (port.WriteBufferSize - port.BytesToWrite > 
+								1 + System.Runtime.InteropServices.Marshal.SizeOf(data))
 							{
+								// write the command id
 								var ba = new byte[] { 1 };
 								port.Write(ba, 0, ba.Length);
-
+								// write the data
 								port.WriteStruct(data);
 							}
 							port.BaseStream.Flush();
@@ -166,6 +194,7 @@ namespace EspMon
 					}
 					else
 					{
+						// make sure unchecked ports are closed
 						if (port.IsOpen)
 						{
 							try { port.Close(); } catch { }
@@ -173,106 +202,93 @@ namespace EspMon
 					}
 					++i;
 				}
-						
-				//_port.Close();
-			} 
-	
-				
-			
+			}
 		}
-
-
-        void CollectSystemInfo()
-        {
-            var updateVisitor = new UpdateVisitor();
+		void CollectSystemInfo()
+		{
+			// use OpenHardwareMonitorLib to collect the system info
+			var updateVisitor = new UpdateVisitor();
 			_computer.Accept(updateVisitor);
-			cpuTjMax = 100;
-			gpuTjMax = 90;
+			cpuTjMax = (int)CpuMaxUpDown.Value;
+			gpuTjMax = (int)GpuMaxUpDown.Value;
 			for (int i = 0; i < _computer.Hardware.Length; i++)
 			{
 				if (_computer.Hardware[i].HardwareType == HardwareType.CPU)
 				{
 					for (int j = 0; j < _computer.Hardware[i].Sensors.Length; j++)
 					{
-						
-                        var sensor = _computer.Hardware[i].Sensors[j];
-						
-						
-						if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("CPU Package")) 
-                        {
-							for(int k = 0; k < sensor.Parameters.Length;++k)
+						var sensor = _computer.Hardware[i].Sensors[j];
+						if (sensor.SensorType == SensorType.Temperature && 
+							sensor.Name.Contains("CPU Package"))
+						{
+							for (int k = 0; k < sensor.Parameters.Length; ++k)
 							{
 								var p = sensor.Parameters[i];
-								if(p.Name.ToLowerInvariant().Contains("tjmax"))
+								if (p.Name.ToLowerInvariant().Contains("tjmax"))
 								{
 									cpuTjMax = (float)p.Value;
 								}
 							}
 							cpuTemp = sensor.Value.GetValueOrDefault();
 						}
-						else if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("CPU Total"))
+						else if (sensor.SensorType == SensorType.Load && 
+							sensor.Name.Contains("CPU Total"))
 						{
 							// store
 							cpuUsage = sensor.Value.GetValueOrDefault();
 						}
-						else if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("CPU Core #1"))
-						{
-							// store
-							cpuSpeed = sensor.Value.GetValueOrDefault();
-						}
 					}
 				}
-				if (_computer.Hardware[i].HardwareType == HardwareType.GpuAti || _computer.Hardware[i].HardwareType == HardwareType.GpuNvidia)
+				if (_computer.Hardware[i].HardwareType == HardwareType.GpuAti || 
+					_computer.Hardware[i].HardwareType == HardwareType.GpuNvidia)
 				{
 					for (int j = 0; j < _computer.Hardware[i].Sensors.Length; j++)
 					{
 						var sensor = _computer.Hardware[i].Sensors[j];
-						if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("GPU Core"))
+						if (sensor.SensorType == SensorType.Temperature && 
+							sensor.Name.Contains("GPU Core"))
 						{
 							// store
 							gpuTemp = sensor.Value.GetValueOrDefault();
 						}
-						else if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Core"))
+						else if (sensor.SensorType == SensorType.Load && 
+							sensor.Name.Contains("GPU Core"))
 						{
 							// store
 							gpuUsage = sensor.Value.GetValueOrDefault();
 						}
-						else if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("GPU Core"))
-						{
-							// store
-							gpuSpeed = sensor.Value.GetValueOrDefault();
-						}
-
 					}
 				}
 			}
-			//System.Diagnostics.Debug.WriteLine(_computer.GetReport());
-        }
+		}
 
 		private void EspMon_Resize(object sender, EventArgs e)
 		{
-            if(WindowState==FormWindowState.Minimized)
+			// hide the window to the tray on minimize
+			if (WindowState == FormWindowState.Minimized)
 			{
-                Hide();
-                Notify.Visible = true;
+				Hide();
+				Notify.Visible = true;
 			}
 		}
 
 		private void Notify_Click(object sender, EventArgs e)
 		{
-            Show();
-            Size = MinimumSize;
-            WindowState = FormWindowState.Normal;
-            Activate();
-        }
+			// show the window on tray click
+			Show();
+			Size = MinimumSize;
+			WindowState = FormWindowState.Normal;
+			Activate();
+		}
 
 		private void PortBox_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
-			if(e.Index>=0 && e.NewValue!=CheckState.Checked)
+			// if the item is unchecked, close the port
+			if (e.Index >= 0 && e.NewValue != CheckState.Checked)
 			{
 				var port = ((PortData)PortBox.Items[e.Index]).Port;
 				try { if (port.IsOpen) port.Close(); } catch { }
-				
+
 			}
 		}
 	}

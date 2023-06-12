@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Text;
-
+// provides extra serial functionality
 internal static class SerialExtensions
 {
     private static bool _IsValidMemberType(Type type)
