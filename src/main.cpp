@@ -18,14 +18,21 @@ static uint32_t timeout_ts = 0;
 
 // only needed if not RGB interface screen
 #ifndef LCD_PIN_NUM_VSYNC
-static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t* edata, void* user_ctx) {
+static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, 
+                            esp_lcd_panel_io_event_data_t* edata, 
+                            void* user_ctx) {
     main_screen.set_flush_complete();
     return true;
 }
 #endif
 
-static void uix_flush(point16 location, typename screen_t::bitmap_type& bmp, void* state) {
-    int x1 = location.x, y1 = location.y, x2 = location.x + bmp.dimensions().width - 1, y2 = location.y + bmp.dimensions().height - 1;
+static void uix_flush(point16 location, 
+                    typename screen_t::bitmap_type& bmp, 
+                    void* state) {
+    int x1 = location.x, 
+        y1 = location.y, 
+        x2 = location.x + bmp.dimensions().width - 1, 
+        y2 = location.y + bmp.dimensions().height - 1;
     lcd_panel_draw_bitmap(x1, y1, x2, y2, bmp.begin());
     // if RGB, no DMA, so we are done once the above completes
 #ifdef LCD_PIN_NUM_VSYNC
