@@ -19,8 +19,11 @@ extern float gpu_values[];
 extern int gpu_max_temp;
 extern gfx::rgba_pixel<32> gpu_colors[];
 
+#ifndef LCD_PIN_NUM_VSYNC
 constexpr static const int lcd_buffer_size = 32 * 1024;
-
+#else
+constexpr static const int lcd_buffer_size = 64 * 1024;
+#endif
 extern screen_t main_screen;
 
 extern label_t cpu_label;

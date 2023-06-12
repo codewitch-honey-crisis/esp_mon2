@@ -113,9 +113,14 @@ float gpu_values[] = {0.0f, 0.0f};
 int gpu_max_temp = 1;
 
 static uint8_t lcd_buffer1[lcd_buffer_size];
+#ifndef LCD_PIN_NUM_VSYNC
 static uint8_t lcd_buffer2[lcd_buffer_size];
-
 screen_t main_screen(lcd_buffer_size, lcd_buffer1, lcd_buffer2);
+#else
+screen_t main_screen(lcd_buffer_size, lcd_buffer1, nullptr);
+#endif
+
+
 
 label_t cpu_label(main_screen);
 label_t cpu_temp_label(main_screen);
