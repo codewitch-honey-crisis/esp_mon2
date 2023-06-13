@@ -1041,7 +1041,9 @@ bool lcd_panel_init() {
     gpio_set_direction((gpio_num_t)LCD_PIN_NUM_SDA, GPIO_MODE_OUTPUT);
 #endif
 #endif
+#ifdef LCD_PANEL
     LCD_PANEL();
+#endif
     esp_lcd_rgb_panel_config_t panel_config;
     memset(&panel_config, 0, sizeof(panel_config));
 
@@ -1102,7 +1104,9 @@ bool lcd_panel_init() {
 
     lcd_frame_buffer = (uint8_t*)rgb_panel->fb;
     lcd_frame_buffer_size = rgb_panel->fb_size;
+    #ifdef LCD_PANEL
     ESP_ERROR_CHECK(LCD_PANEL());
+    #endif
     
     esp_lcd_panel_disp_on_off(lcd_handle, true);
 

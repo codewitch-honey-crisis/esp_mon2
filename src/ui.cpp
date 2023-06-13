@@ -2,10 +2,8 @@
 // must appear only once in the project
 #define DISCONNECTED_ICON_IMPLEMENTATION
 #include <disconnected_icon.hpp>
-// our font for the UI. This doesn't
-// require a leading define because it's
-// the old header format, but can only
-// be included in one place
+// our font for the UI. 
+#define OPENSANS_REGULAR_IMPLEMENTATION
 #include <fonts/OpenSans_Regular.hpp>
 #include <ui.hpp>
 // for easier modification
