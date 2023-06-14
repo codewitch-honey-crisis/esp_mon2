@@ -20,7 +20,7 @@ static char gpu_sz[32];
 static uint32_t timeout_ts = 0;
 
 #ifdef M5STACK_CORE2
-m5tough_power power;
+m5core2_power power;
 #endif
 
 // only needed if not RGB interface screen
