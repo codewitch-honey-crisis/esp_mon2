@@ -40,12 +40,7 @@ static void uix_flush(point16 location,
         y1 = location.y, 
         x2 = location.x + bmp.dimensions().width - 1, 
         y2 = location.y + bmp.dimensions().height - 1;
-    
-    bmp.clear(bmp.bounds());
-    for(int i = 0;i<bmp.dimensions().width;i+=2) {
-        draw::line(bmp,srect16(i,0,i,bmp.dimensions().height/2-1),color_t::white);
-    }
-    //Serial.printf("(%d,%d)-(%d,%d)\n",x1,y1,x2,y2);
+ 
     lcd_panel_draw_bitmap(x1, y1, x2, y2, bmp.begin());
     // if RGB, no DMA, so we are done once the above completes
 #ifdef LCD_PIN_NUM_VSYNC

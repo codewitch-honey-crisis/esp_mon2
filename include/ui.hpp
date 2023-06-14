@@ -3,11 +3,8 @@
 #include <uix.hpp>
 #include <circular_buffer.hpp>
 // declare the types for our controls and other things
-#if LCD_COLOR_SPACE == ESP_LCD_COLOR_SPACE_MONOCHROME
-using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::gsc_pixel<LCD_BIT_DEPTH>>;
-#else
 using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::rgb_pixel<LCD_BIT_DEPTH>>;
-#endif
+
 using label_t = uix::label<typename screen_t::pixel_type,
                             typename screen_t::palette_type>;
 using svg_box_t = uix::svg_box<typename screen_t::pixel_type,
