@@ -26,6 +26,7 @@
 #endif // TTGO_T1
 
 #ifdef ESP_WROVER_KIT
+#include <esp_lcd_panel_ili9341.h>
 #define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 0
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -51,6 +52,7 @@
 #endif // ESP_WROVER_KIT
 
 #ifdef ESP_DISPLAY_S3
+#include <esp_lcd_panel_ili9488.h>
 #define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -90,6 +92,7 @@
 #endif // ESP_DISPLAY_S3
 
 #ifdef M5STACK_CORE2
+#include <esp_lcd_panel_ili9342.h>
 #define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
@@ -112,6 +115,7 @@
 #endif // M5STACK_CORE2
 
 #ifdef M5STACK_FIRE
+#include <esp_lcd_panel_ili9342.h>
 #define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
@@ -416,6 +420,7 @@
 #endif
 #endif // SUNTON_7INCH
 
+#ifndef LCD_WIDTH
 #ifdef LCD_SWAP_XY
 #if LCD_SWAP_XY
 #define LCD_WIDTH LCD_VRES
@@ -427,6 +432,10 @@
 #else
 #define LCD_WIDTH LCD_HRES
 #define LCD_HEIGHT LCD_VRES
+#endif
+#endif
+#ifndef LCD_BIT_DEPTH
+#define LCD_BIT_DEPTH 16
 #endif
 
 #endif // LCD_CONFIG_H

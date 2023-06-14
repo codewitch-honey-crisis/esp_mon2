@@ -8,6 +8,9 @@ using namespace gfx;
 using namespace uix;
 #include <ui.hpp>
 #include <interface.hpp>
+#ifdef M5STACK_CORE2
+#include <m5core2_power.hpp>
+#endif
 
 // label string data
 static char cpu_sz[32];
@@ -15,6 +18,10 @@ static char gpu_sz[32];
 
 // signal timer for disconnection detection
 static uint32_t timeout_ts = 0;
+
+#ifdef M5STACK_CORE2
+m5tough_power power;
+#endif
 
 // only needed if not RGB interface screen
 #ifndef LCD_PIN_NUM_VSYNC
@@ -33,6 +40,12 @@ static void uix_flush(point16 location,
         y1 = location.y, 
         x2 = location.x + bmp.dimensions().width - 1, 
         y2 = location.y + bmp.dimensions().height - 1;
+    
+    bmp.clear(bmp.bounds());
+    for(int i = 0;i<bmp.dimensions().width;i+=2) {
+        draw::line(bmp,srect16(i,0,i,bmp.dimensions().height/2-1),color_t::white);
+    }
+    //Serial.printf("(%d,%d)-(%d,%d)\n",x1,y1,x2,y2);
     lcd_panel_draw_bitmap(x1, y1, x2, y2, bmp.begin());
     // if RGB, no DMA, so we are done once the above completes
 #ifdef LCD_PIN_NUM_VSYNC
@@ -42,14 +55,6 @@ static void uix_flush(point16 location,
 
 void setup() {
     Serial.begin(115200);
-    // RGB interface LCD init is slightly different
-#ifdef LCD_PIN_NUM_VSYNC
-    lcd_panel_init();
-#else
-    lcd_panel_init(lcd_buffer_size,lcd_flush_ready);
-#endif
-    // initialize the main screen (ui.cpp)
-    main_screen_init(uix_flush);
     // enable the power pins, as necessary
 #ifdef T_DISPLAY_S3
     pinMode(15, OUTPUT); 
@@ -58,6 +63,19 @@ void setup() {
     pinMode(4, OUTPUT); 
     digitalWrite(4, HIGH);
 #endif
+#ifdef M5STACK_CORE2
+    power.initialize();
+#endif
+
+    // RGB interface LCD init is slightly different
+#ifdef LCD_PIN_NUM_VSYNC
+    lcd_panel_init();
+#else
+    lcd_panel_init(lcd_buffer_size,lcd_flush_ready);
+#endif
+    // initialize the main screen (ui.cpp)
+    main_screen_init(uix_flush);
+
 }
 
 void loop() {
@@ -67,6 +85,7 @@ void loop() {
         disconnected_label.visible(true);
         disconnected_svg.visible(true);
     }
+    main_screen.invalidate(main_screen.bounds());
     // update the UI
     main_screen.update();
 

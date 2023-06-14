@@ -2,6 +2,7 @@
 #define LCD_INIT_H
 #include "lcd_config.h"
 #include <esp_lcd_panel_io.h>
+#include <driver/i2c.h>
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
@@ -1125,7 +1126,39 @@ bool lcd_panel_init(size_t max_transfer_size, esp_lcd_panel_io_color_trans_done_
 #ifdef LCD_PIN_NUM_BCKL
     gpio_set_direction((gpio_num_t)LCD_PIN_NUM_BCKL, GPIO_MODE_OUTPUT);
 #endif               // LCD_PIN_NUM_BCKL
-#ifdef LCD_SPI_HOST  // 1-bit SPI
+#ifdef LCD_I2C_HOST // I2C
+    i2c_config_t i2c_conf;
+    memset(&i2c_conf,0,sizeof(i2c_config_t));
+    
+    i2c_conf.mode = I2C_MODE_MASTER,
+    i2c_conf.sda_io_num = LCD_PIN_NUM_SDA;
+    i2c_conf.scl_io_num = LCD_PIN_NUM_SCL;
+    i2c_conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    i2c_conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    i2c_conf.master.clk_speed = LCD_PIXEL_CLOCK_HZ;
+    
+    ESP_ERROR_CHECK(i2c_param_config(LCD_I2C_HOST, &i2c_conf));
+    ESP_ERROR_CHECK(i2c_driver_install(LCD_I2C_HOST, I2C_MODE_MASTER, 0, 0, 0));
+
+   ESP_LOGI(TAG, "Install panel IO");
+    esp_lcd_panel_io_handle_t io_handle = NULL;
+    esp_lcd_panel_io_i2c_config_t io_config;
+    memset(&io_config,0,sizeof(esp_lcd_panel_io_i2c_config_t));
+    io_config.dev_addr = LCD_I2C_ADDR;
+#ifdef LCD_CONTROL_PHASE_BYTES
+    io_config.control_phase_bytes = LCD_CONTROL_PHASE_BYTES;
+#else
+    io_config.control_phase_bytes = 0;
+#endif
+    io_config.lcd_cmd_bits = 8;   
+    io_config.lcd_param_bits = 8; 
+    io_config.on_color_trans_done = done_callback;
+    io_config.dc_bit_offset = LCD_DC_BIT_OFFSET;  
+#if defined(LCD_ENABLE_CONTROL_PHASE) && LCD_ENABLE_CONTROL_PHASE != 0
+    io_config.flags.disable_control_phase = 1;
+#endif
+    esp_lcd_new_panel_io_i2c((esp_lcd_i2c_bus_handle_t)LCD_I2C_HOST, &io_config, &io_handle);
+#elif defined(LCD_SPI_HOST)  // 1-bit SPI
     spi_bus_config_t bus_config;
     memset(&bus_config, 0, sizeof(bus_config));
     bus_config.sclk_io_num = LCD_PIN_NUM_CLK;
@@ -1240,8 +1273,11 @@ if(((int)LCD_COLOR_SPACE) == 0) {
 #else
     panel_config.color_space = LCD_COLOR_SPACE;
 #endif
+#ifndef LCD_BIT_DEPTH
     panel_config.bits_per_pixel = 16;
-    
+#else
+    panel_config.bits_per_pixel = LCD_BIT_DEPTH;
+#endif
     // Initialize the LCD configuration
     LCD_PANEL(io_handle, &panel_config, &lcd_handle);
 

@@ -238,7 +238,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback,
     // declare a transparent pixel/color
     rgba_pixel<32> transparent(0, 0, 0, 0);
     // screen is black
-    main_screen.background_color(color16_t::black);
+    main_screen.background_color(color_t::black);
     // set the flush callback
     main_screen.on_flush_callback(flush_callback, flush_callback_state);
 

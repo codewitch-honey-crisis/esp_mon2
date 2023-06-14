@@ -3,7 +3,11 @@
 #include <uix.hpp>
 #include <circular_buffer.hpp>
 // declare the types for our controls and other things
-using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::rgb_pixel<16>>;
+#if LCD_COLOR_SPACE == ESP_LCD_COLOR_SPACE_MONOCHROME
+using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::gsc_pixel<LCD_BIT_DEPTH>>;
+#else
+using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::rgb_pixel<LCD_BIT_DEPTH>>;
+#endif
 using label_t = uix::label<typename screen_t::pixel_type,
                             typename screen_t::palette_type>;
 using svg_box_t = uix::svg_box<typename screen_t::pixel_type,
@@ -11,7 +15,7 @@ using svg_box_t = uix::svg_box<typename screen_t::pixel_type,
 using canvas_t = uix::canvas<typename screen_t::pixel_type,
                             typename screen_t::palette_type>;
 // RGB565 X11 colors (used for screen)
-using color16_t = gfx::color<gfx::rgb_pixel<16>>;
+using color_t = gfx::color<typename screen_t::pixel_type>;
 // RGBA8888 X11 colors (used for controls)
 using color32_t = gfx::color<gfx::rgba_pixel<32>>;
 // circular buffer for graphs
