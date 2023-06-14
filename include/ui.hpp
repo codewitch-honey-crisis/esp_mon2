@@ -3,7 +3,8 @@
 #include <uix.hpp>
 #include <circular_buffer.hpp>
 // declare the types for our controls and other things
-using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,gfx::rgb_pixel<LCD_BIT_DEPTH>>;
+using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,
+                            gfx::rgb_pixel<LCD_BIT_DEPTH>>;
 
 using label_t = uix::label<typename screen_t::pixel_type,
                             typename screen_t::palette_type>;
