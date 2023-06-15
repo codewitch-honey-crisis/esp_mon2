@@ -246,7 +246,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback,
     // to do so we measure the size of the text (@ 1/10th of 
     // height of the screen) and bound the label based on that
     cpu_label.text("CPU");
-    cpu_label.text_line_height(main_screen.dimensions().height / 10);
+    cpu_label.text_line_height(main_screen.dimensions().height / 7);
     cpu_label.bounds(text_font.measure_text(ssize16::max(), 
                                 spoint16::zero(), 
                                 cpu_label.text(), 
