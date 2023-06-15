@@ -36,7 +36,11 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
 static void uix_flush(const rect16& bounds, 
                     const void* bmp, 
                     void* state) {
-    lcd_panel_draw_bitmap(bounds.x1, bounds.y1, bounds.x2, bounds.y2,(void*) bmp);
+    lcd_panel_draw_bitmap(bounds.x1, 
+                        bounds.y1, 
+                        bounds.x2, 
+                        bounds.y2,
+                        (void*) bmp);
     // if RGB, no DMA, so we are done once the above completes
 #ifdef LCD_PIN_NUM_VSYNC
     main_screen.set_flush_complete();
