@@ -1,5 +1,8 @@
 #pragma once
 #include <gfx.hpp>
+// the SSD1306 is a bit odd, in that it packs 8 pixels in a byte, arranged VERTICALLY, but then the bytes are arranged HORIZONTALLY
+// since lcd_init.h does no translation, we do it here, such that when draws happen, they happen to this surface, which translates
+// the memory into a format usable by the ssd1306
 class ssd1306_surface_adapter final {
 public:
     using type = ssd1306_surface_adapter;
@@ -7,6 +10,7 @@ public:
     using palette_type = gfx::palette<pixel_type,pixel_type>;
     using caps = gfx::gfx_caps< false,false,false,false,false,true,false>;
 private:
+    // use an inner bitmap over our memory
     using bitmap_type = gfx::bitmap<pixel_type,palette_type>;
     bitmap_type m_bmp;  
     ssd1306_surface_adapter(const ssd1306_surface_adapter& rhs)=delete;
@@ -27,7 +31,7 @@ public:
         const int y = location.y / 8;
         return m_bmp.point(gfx::point16(x,y),color);
     }
-    gfx::gfx_result point(gfx::point16 location, pixel_type* out_color) {
+    gfx::gfx_result point(gfx::point16 location, pixel_type* out_color) const {
         const int x = (location.x * 8) + (7-(location.y % 8));
         const int y = location.y / 8;
         return m_bmp.point(gfx::point16(x,y),out_color);

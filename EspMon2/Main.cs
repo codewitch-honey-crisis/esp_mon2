@@ -300,16 +300,20 @@ namespace EspMon
 
 		private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
-			Invoke(new Action(() =>
+			try
 			{
-				try
+				Invoke(new Action(() =>
 				{
-					SerialPort port = (SerialPort)sender;
-					Log.AppendText(port.ReadExisting());
-				}
-				catch { }
-				
-			}));
+					try
+					{
+						SerialPort port = (SerialPort)sender;
+						Log.AppendText(port.ReadExisting());
+					}
+					catch { }
+
+				}));
+			}
+			catch { }
 		}
 	}
 }

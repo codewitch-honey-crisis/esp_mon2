@@ -192,11 +192,11 @@ static void draw_graph(canvas_t::control_surface_type& destination,
 }
 // define the declarations from the header
 buffer_t cpu_buffers[2];
-rgba_pixel<32> cpu_colors[] = {color32_t::blue, rgba_pixel<32>()};
+rgba_pixel<32> cpu_colors[] = {color32_t::light_blue, rgba_pixel<32>()};
 float cpu_values[] = {0.0f, 0.0f};
 int cpu_max_temp = 1;
 buffer_t gpu_buffers[2];
-rgba_pixel<32> gpu_colors[] = {color32_t::blue, rgba_pixel<32>()};
+rgba_pixel<32> gpu_colors[] = {color32_t::light_blue, rgba_pixel<32>()};
 float gpu_values[] = {0.0f, 0.0f};
 int gpu_max_temp = 1;
 

@@ -16,6 +16,10 @@ using namespace uix;
 static char cpu_sz[32];
 static char gpu_sz[32];
 
+// so we don't redraw temps
+static int old_cpu_temp=-1;
+static int old_gpu_temp=-1;
+
 // signal timer for disconnection detection
 static uint32_t timeout_ts = 0;
 
@@ -115,8 +119,11 @@ void loop() {
                     cpu_graph.invalidate();
                     cpu_bar.invalidate();
                     // update CPU the label (temperature)
-                    sprintf(cpu_sz,"%dC",data.cpu_temp);
-                    cpu_temp_label.text(cpu_sz);
+                    if(old_cpu_temp!=data.cpu_temp) {
+                        old_cpu_temp = data.cpu_temp;
+                        sprintf(cpu_sz,"%dC",data.cpu_temp);
+                        cpu_temp_label.text(cpu_sz);
+                    }
                     // update the GPU graph buffer (usage)
                     if (gpu_buffers[0].full()) {
                         gpu_buffers[0].get(&tmp);
@@ -138,8 +145,11 @@ void loop() {
                     gpu_graph.invalidate();
                     gpu_bar.invalidate();
                     // update GPU the label (temperature)
-                    sprintf(gpu_sz,"%dC",data.gpu_temp);
-                    gpu_temp_label.text(gpu_sz);   
+                    if(old_gpu_temp!=data.gpu_temp) {
+                        old_gpu_temp = data.gpu_temp;
+                        sprintf(gpu_sz,"%dC",data.gpu_temp);
+                        gpu_temp_label.text(gpu_sz);   
+                    }
                 } else {
                     // eat bad data
                     while(-1!=Serial.read());
