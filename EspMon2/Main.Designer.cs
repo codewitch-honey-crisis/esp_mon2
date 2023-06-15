@@ -35,13 +35,17 @@ namespace EspMon
 			this.Notify = new System.Windows.Forms.NotifyIcon(this.components);
 			this.StartedCheckBox = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.PortBox = new System.Windows.Forms.CheckedListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.CpuMaxUpDown = new System.Windows.Forms.NumericUpDown();
 			this.GpuMaxUpDown = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.PortBox = new System.Windows.Forms.CheckedListBox();
+			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.Log = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).BeginInit();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// RefreshButton
@@ -85,18 +89,6 @@ namespace EspMon
 			this.label1.Size = new System.Drawing.Size(71, 16);
 			this.label1.TabIndex = 5;
 			this.label1.Text = "COM Ports";
-			// 
-			// PortBox
-			// 
-			this.PortBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.PortBox.FormattingEnabled = true;
-			this.PortBox.Location = new System.Drawing.Point(16, 101);
-			this.PortBox.Name = "PortBox";
-			this.PortBox.Size = new System.Drawing.Size(254, 89);
-			this.PortBox.TabIndex = 6;
-			this.PortBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.PortBox_ItemCheck);
 			// 
 			// label2
 			// 
@@ -160,16 +152,60 @@ namespace EspMon
 			this.label3.TabIndex = 9;
 			this.label3.Text = "GPU Temp Max";
 			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Controls.Add(this.Log);
+			this.panel1.Controls.Add(this.splitter1);
+			this.panel1.Controls.Add(this.PortBox);
+			this.panel1.Location = new System.Drawing.Point(12, 96);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(258, 163);
+			this.panel1.TabIndex = 11;
+			// 
+			// PortBox
+			// 
+			this.PortBox.Dock = System.Windows.Forms.DockStyle.Top;
+			this.PortBox.FormattingEnabled = true;
+			this.PortBox.Location = new System.Drawing.Point(0, 0);
+			this.PortBox.Name = "PortBox";
+			this.PortBox.Size = new System.Drawing.Size(258, 72);
+			this.PortBox.TabIndex = 7;
+			this.PortBox.SelectedIndexChanged += new System.EventHandler(this.PortBox_SelectedIndexChanged);
+			// 
+			// splitter1
+			// 
+			this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.splitter1.Location = new System.Drawing.Point(0, 72);
+			this.splitter1.Name = "splitter1";
+			this.splitter1.Size = new System.Drawing.Size(258, 3);
+			this.splitter1.TabIndex = 8;
+			this.splitter1.TabStop = false;
+			// 
+			// Log
+			// 
+			this.Log.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Log.Location = new System.Drawing.Point(0, 75);
+			this.Log.Multiline = true;
+			this.Log.Name = "Log";
+			this.Log.ReadOnly = true;
+			this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.Log.Size = new System.Drawing.Size(258, 88);
+			this.Log.TabIndex = 9;
+			this.Log.WordWrap = false;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(281, 197);
+			this.ClientSize = new System.Drawing.Size(281, 260);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.GpuMaxUpDown);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.CpuMaxUpDown);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.PortBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.StartedCheckBox);
 			this.Controls.Add(this.RefreshButton);
@@ -180,6 +216,8 @@ namespace EspMon
 			this.Resize += new System.EventHandler(this.EspMon_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).EndInit();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -191,11 +229,14 @@ namespace EspMon
 		private System.Windows.Forms.NotifyIcon Notify;
 		private System.Windows.Forms.CheckBox StartedCheckBox;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.CheckedListBox PortBox;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.NumericUpDown CpuMaxUpDown;
 		private System.Windows.Forms.NumericUpDown GpuMaxUpDown;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.TextBox Log;
+		private System.Windows.Forms.Splitter splitter1;
+		private System.Windows.Forms.CheckedListBox PortBox;
 	}
 }
 

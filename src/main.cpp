@@ -33,15 +33,10 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
 }
 #endif
 
-static void uix_flush(point16 location, 
-                    typename screen_t::bitmap_type& bmp, 
+static void uix_flush(const rect16& bounds, 
+                    const void* bmp, 
                     void* state) {
-    int x1 = location.x, 
-        y1 = location.y, 
-        x2 = location.x + bmp.dimensions().width - 1, 
-        y2 = location.y + bmp.dimensions().height - 1;
- 
-    lcd_panel_draw_bitmap(x1, y1, x2, y2, bmp.begin());
+    lcd_panel_draw_bitmap(bounds.x1, bounds.y1, bounds.x2, bounds.y2,(void*) bmp);
     // if RGB, no DMA, so we are done once the above completes
 #ifdef LCD_PIN_NUM_VSYNC
     main_screen.set_flush_complete();
@@ -80,7 +75,6 @@ void loop() {
         disconnected_label.visible(true);
         disconnected_svg.visible(true);
     }
-    main_screen.invalidate(main_screen.bounds());
     // update the UI
     main_screen.update();
 

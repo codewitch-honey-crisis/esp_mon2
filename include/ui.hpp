@@ -3,15 +3,12 @@
 #include <uix.hpp>
 #include <circular_buffer.hpp>
 // declare the types for our controls and other things
-using screen_t = uix::screen<LCD_WIDTH,LCD_HEIGHT,
-                            gfx::rgb_pixel<LCD_BIT_DEPTH>>;
+using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
+                            LCD_FRAME_ADAPTER,LCD_X_ALIGN,LCD_Y_ALIGN>;
 
-using label_t = uix::label<typename screen_t::pixel_type,
-                            typename screen_t::palette_type>;
-using svg_box_t = uix::svg_box<typename screen_t::pixel_type,
-                            typename screen_t::palette_type>;
-using canvas_t = uix::canvas<typename screen_t::pixel_type,
-                            typename screen_t::palette_type>;
+using label_t = uix::label<typename screen_t::control_surface_type>;
+using svg_box_t = uix::svg_box<typename screen_t::control_surface_type>;
+using canvas_t = uix::canvas<typename screen_t::control_surface_type>;
 // RGB565 X11 colors (used for screen)
 using color_t = gfx::color<typename screen_t::pixel_type>;
 // RGBA8888 X11 colors (used for controls)

@@ -420,6 +420,34 @@
 #endif
 #endif // SUNTON_7INCH
 
+#ifdef HELTEC_WIFI_KIT_V2
+#include <ssd1306_surface_adapter.hpp>
+#define MONITOR Serial
+#define LCD_I2C_HOST    0
+#define LCD_I2C_ADDR 0x3C
+#define LCD_CONTROL_PHASE_BYTES 1
+#define LCD_DC_BIT_OFFSET 6
+#define LCD_BIT_DEPTH 1
+#define LCD_BCKL_ON_LEVEL 1
+#define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
+#define LCD_PIN_NUM_SCL 15
+#define LCD_PIN_NUM_SDA 4
+#define LCD_PIN_NUM_RST 16
+#define LCD_PANEL esp_lcd_new_panel_ssd1306
+#define LCD_HRES 128
+#define LCD_VRES 64
+#define LCD_COLOR_SPACE ESP_LCD_COLOR_SPACE_MONOCHROME
+#define LCD_PIXEL_CLOCK_HZ (400 * 1000)
+#define LCD_GAP_X 0
+#define LCD_GAP_Y 0
+#define LCD_MIRROR_X false
+#define LCD_MIRROR_Y false
+#define LCD_INVERT_COLOR false
+#define LCD_SWAP_XY false
+#define LCD_FRAME_ADAPTER ssd1306_surface_adapter
+#define LCD_Y_ALIGN 8
+#endif // HELTEC_WIFI_KIT_V2
+
 #ifndef LCD_WIDTH
 #ifdef LCD_SWAP_XY
 #if LCD_SWAP_XY
@@ -437,5 +465,16 @@
 #ifndef LCD_BIT_DEPTH
 #define LCD_BIT_DEPTH 16
 #endif
-
+#ifndef LCD_X_ALIGN
+#define LCD_X_ALIGN 1
+#endif
+#ifndef LCD_Y_ALIGN
+#define LCD_Y_ALIGN 1
+#endif
+#ifndef LCD_FRAME_ADAPTER
+#define LCD_FRAME_ADAPTER gfx::bitmap<gfx::rgb_pixel<LCD_BIT_DEPTH>>
+#endif
+#ifndef LCD_DC_BIT_OFFSET
+#define LCD_DC_BIT_OFFSET 0
+#endif
 #endif // LCD_CONFIG_H
