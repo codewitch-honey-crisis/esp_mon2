@@ -41,8 +41,6 @@ namespace EspMon
 			this.label3 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.PortBox = new System.Windows.Forms.CheckedListBox();
-			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.Log = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -157,8 +155,6 @@ namespace EspMon
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel1.Controls.Add(this.Log);
-			this.panel1.Controls.Add(this.splitter1);
 			this.panel1.Controls.Add(this.PortBox);
 			this.panel1.Location = new System.Drawing.Point(12, 96);
 			this.panel1.Name = "panel1";
@@ -167,34 +163,12 @@ namespace EspMon
 			// 
 			// PortBox
 			// 
-			this.PortBox.Dock = System.Windows.Forms.DockStyle.Top;
+			this.PortBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.PortBox.FormattingEnabled = true;
 			this.PortBox.Location = new System.Drawing.Point(0, 0);
 			this.PortBox.Name = "PortBox";
-			this.PortBox.Size = new System.Drawing.Size(258, 72);
+			this.PortBox.Size = new System.Drawing.Size(258, 163);
 			this.PortBox.TabIndex = 7;
-			this.PortBox.SelectedIndexChanged += new System.EventHandler(this.PortBox_SelectedIndexChanged);
-			// 
-			// splitter1
-			// 
-			this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.splitter1.Location = new System.Drawing.Point(0, 72);
-			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(258, 3);
-			this.splitter1.TabIndex = 8;
-			this.splitter1.TabStop = false;
-			// 
-			// Log
-			// 
-			this.Log.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.Log.Location = new System.Drawing.Point(0, 75);
-			this.Log.Multiline = true;
-			this.Log.Name = "Log";
-			this.Log.ReadOnly = true;
-			this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.Log.Size = new System.Drawing.Size(258, 88);
-			this.Log.TabIndex = 9;
-			this.Log.WordWrap = false;
 			// 
 			// Main
 			// 
@@ -217,7 +191,6 @@ namespace EspMon
 			((System.ComponentModel.ISupportInitialize)(this.CpuMaxUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.GpuMaxUpDown)).EndInit();
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -234,8 +207,6 @@ namespace EspMon
 		private System.Windows.Forms.NumericUpDown GpuMaxUpDown;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.TextBox Log;
-		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.CheckedListBox PortBox;
 	}
 }

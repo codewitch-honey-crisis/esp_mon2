@@ -283,37 +283,6 @@ namespace EspMon
 			_computer.Open();
 		}
 
-		private void PortBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (PortBox.SelectedIndex < 0) return;
-			var port = ((PortData)PortBox.SelectedItem).Port;
-			if(port!=null)
-			{
-				foreach(PortData portData in PortBox.Items)
-				{
-					portData.Port.DataReceived -= Port_DataReceived;
-				}
-				Log.Clear();
-				port.DataReceived += Port_DataReceived;
-			}
-		}
 
-		private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-		{
-			try
-			{
-				Invoke(new Action(() =>
-				{
-					try
-					{
-						SerialPort port = (SerialPort)sender;
-						Log.AppendText(port.ReadExisting());
-					}
-					catch { }
-
-				}));
-			}
-			catch { }
-		}
 	}
 }

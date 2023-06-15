@@ -440,13 +440,37 @@
 #define LCD_PIXEL_CLOCK_HZ (400 * 1000)
 #define LCD_GAP_X 0
 #define LCD_GAP_Y 0
-#define LCD_MIRROR_X false
-#define LCD_MIRROR_Y false
+#define LCD_MIRROR_X true
+#define LCD_MIRROR_Y true
 #define LCD_INVERT_COLOR false
 #define LCD_SWAP_XY false
 #define LCD_FRAME_ADAPTER ssd1306_surface_adapter
 #define LCD_Y_ALIGN 8
 #endif // HELTEC_WIFI_KIT_V2
+
+#ifdef ESP_USB_OTG
+#define MONITOR Serial
+#define LCD_SPI_HOST    SPI2_HOST
+#define LCD_BCKL_ON_LEVEL 1
+#define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
+#define LCD_PIN_NUM_MOSI 7
+#define LCD_PIN_NUM_CLK 6
+#define LCD_PIN_NUM_CS 5
+#define LCD_PIN_NUM_DC 4
+#define LCD_PIN_NUM_RST 8
+#define LCD_PIN_NUM_BCKL 9
+#define LCD_PANEL esp_lcd_new_panel_st7789
+#define LCD_HRES 240
+#define LCD_VRES 240
+#define LCD_COLOR_SPACE ESP_LCD_COLOR_SPACE_RGB
+#define LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
+#define LCD_GAP_X 0
+#define LCD_GAP_Y 0
+#define LCD_MIRROR_X false
+#define LCD_MIRROR_Y false
+#define LCD_INVERT_COLOR true
+#define LCD_SWAP_XY false
+#endif // ESP_USB_OTG
 
 #ifndef LCD_WIDTH
 #ifdef LCD_SWAP_XY
