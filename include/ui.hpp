@@ -9,7 +9,7 @@ using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
 using label_t = uix::label<typename screen_t::control_surface_type>;
 using svg_box_t = uix::svg_box<typename screen_t::control_surface_type>;
 using canvas_t = uix::canvas<typename screen_t::control_surface_type>;
-// RGB565 X11 colors (used for screen)
+// X11 colors (used for screen)
 using color_t = gfx::color<typename screen_t::pixel_type>;
 // RGBA8888 X11 colors (used for controls)
 using color32_t = gfx::color<gfx::rgba_pixel<32>>;
