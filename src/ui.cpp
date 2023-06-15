@@ -243,7 +243,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback,
     main_screen.on_flush_callback(flush_callback, flush_callback_state);
 
     // declare the first label. Everything else is based on this.
-    // to do so we measure the size of the text (@ 1/10th of 
+    // to do so we measure the size of the text (@ 1/7th of 
     // height of the screen) and bound the label based on that
     cpu_label.text("CPU");
     cpu_label.text_line_height(main_screen.dimensions().height / 7);
