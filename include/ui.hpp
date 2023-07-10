@@ -1,6 +1,7 @@
 #pragma once
 #include <lcd_config.h>
 #include <uix.hpp>
+#include <gfx.hpp>
 #include <circular_buffer.hpp>
 // declare the types for our controls and other things
 using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
