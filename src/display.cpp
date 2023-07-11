@@ -21,6 +21,7 @@ screen_t* active_screen = nullptr;
 
 
 #ifdef ESP_PLATFORM
+#ifdef LCD_DMA
 // only needed if DMA enabled
 static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, 
                             esp_lcd_panel_io_event_data_t* edata, 
@@ -30,6 +31,7 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
     }
     return true;
 }
+#endif
 #if !defined(ESP_PLATFORM)
 static void uix_wait(void* state) {
 }

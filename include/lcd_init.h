@@ -1000,7 +1000,11 @@ struct esp_rgb_panel_t
   size_t resolution_hz;                                        // Peripheral clock resolution
   esp_lcd_rgb_timing_t timings;                                // RGB timing parameters (e.g. pclk, sync pulse, porch width)
   gdma_channel_handle_t dma_chan;                              // DMA channel handle
+  #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 1)
+  esp_lcd_panel_io_color_trans_done_cb_t on_frame_trans_done;
+  #else
   esp_lcd_rgb_panel_frame_trans_done_cb_t on_frame_trans_done; // Callback, invoked after frame trans done
+  #endif
   void *user_ctx;                                              // Reserved user's data of callback functions
   int x_gap;                                                   // Extra gap in x coordinate, it's used when calculate the flush window
   int y_gap;                                                   // Extra gap in y coordinate, it's used when calculate the flush window
