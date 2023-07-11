@@ -2,7 +2,7 @@
 #include <lcd_config.h>
 #include <uix.hpp>
 #include <gfx.hpp>
-#include <circular_buffer.hpp>
+//#include <circular_buffer.hpp>
 // declare the types for our controls and other things
 using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
                             LCD_FRAME_ADAPTER,LCD_X_ALIGN,LCD_Y_ALIGN>;
@@ -15,7 +15,7 @@ using color_t = gfx::color<typename screen_t::pixel_type>;
 // RGBA8888 X11 colors (used for controls)
 using color32_t = gfx::color<gfx::rgba_pixel<32>>;
 // circular buffer for graphs
-using buffer_t = circular_buffer<float,100>;
+using buffer_t = data::circular_buffer<float,100>;
 
 // the buffers hold the graph data for the CPU
 extern buffer_t cpu_buffers[];
