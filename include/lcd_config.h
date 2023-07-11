@@ -3,6 +3,7 @@
 
 #ifdef TTGO_T1
 #define LCD_SPI_HOST    SPI3_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 19
@@ -29,6 +30,7 @@
 #define LCD_BCKL_ON_LEVEL 0
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_SPI_HOST    HSPI_HOST
+#define LCD_DMA
 #define LCD_PIN_NUM_MISO 25
 #define LCD_PIN_NUM_MOSI 23
 #define LCD_PIN_NUM_CLK  19
@@ -53,6 +55,7 @@
 #include <esp_lcd_panel_ili9488.h>
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
+#define LCD_DMA
 #define LCD_PIN_NUM_CS 37
 #define LCD_PIN_NUM_WR 35
 #define LCD_PIN_NUM_RD 48
@@ -91,6 +94,7 @@
 #ifdef M5STACK_CORE2
 #include <esp_lcd_panel_ili9342.h>
 #define LCD_SPI_HOST    SPI3_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 23
@@ -113,6 +117,7 @@
 #ifdef M5STACK_FIRE
 #include <esp_lcd_panel_ili9342.h>
 #define LCD_SPI_HOST    SPI3_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 23
@@ -239,6 +244,7 @@
 #ifdef T_DISPLAY_S3
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
+#define LCD_DMA
 #define LCD_PIN_NUM_CS 6
 #define LCD_PIN_NUM_RST 5
 #define LCD_PIN_NUM_WR 8
@@ -268,6 +274,7 @@
 
 #ifdef S3_T_QT
 #define LCD_SPI_HOST    SPI3_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 0
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 2
@@ -291,6 +298,7 @@
 
 #ifdef M5STACK_S3_ATOM
 #define LCD_SPI_HOST    SPI3_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 21
@@ -411,6 +419,7 @@
 #ifdef HELTEC_WIFI_KIT_V2
 #include <ssd1306_surface_adapter.hpp>
 #define LCD_I2C_HOST    0
+#define LCD_DMA
 #define LCD_I2C_ADDR 0x3C
 #define LCD_CONTROL_PHASE_BYTES 1
 #define LCD_DC_BIT_OFFSET 6
@@ -437,6 +446,7 @@
 
 #ifdef ESP_USB_OTG
 #define LCD_SPI_HOST    SPI2_HOST
+#define LCD_DMA
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_MOSI 7
