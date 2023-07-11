@@ -43,13 +43,7 @@ static uint32_t get_ms() {
     return ((uint32_t)pdTICKS_TO_MS(xTaskGetTickCount()));
 #endif
 }
-static void serial_init() {
-#ifdef ARDUINO
-    Serial.begin(115200);
-#else
-    
-#endif
-}
+
 static int serial_getch() {
 #ifdef ARDUINO
     return Serial.read();
