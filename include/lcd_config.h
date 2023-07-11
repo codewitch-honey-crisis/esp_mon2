@@ -2,7 +2,6 @@
 #define LCD_CONFIG_H
 
 #ifdef TTGO_T1
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -27,7 +26,6 @@
 
 #ifdef ESP_WROVER_KIT
 #include <esp_lcd_panel_ili9341.h>
-#define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 0
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_SPI_HOST    HSPI_HOST
@@ -53,7 +51,6 @@
 
 #ifdef ESP_DISPLAY_S3
 #include <esp_lcd_panel_ili9488.h>
-#define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_CS 37
@@ -93,7 +90,6 @@
 
 #ifdef M5STACK_CORE2
 #include <esp_lcd_panel_ili9342.h>
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -116,7 +112,6 @@
 
 #ifdef M5STACK_FIRE
 #include <esp_lcd_panel_ili9342.h>
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -140,7 +135,6 @@
 #endif // M5STACK_FIRE
 
 #ifdef ESP_DISPLAY_4INCH
-#define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_CS 1
@@ -191,7 +185,6 @@
 #endif // ESP_DISPLAY_4INCH
 
 #ifdef ESP_DISPLAY_4_3INCH
-#define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 //#define LCD_PIN_NUM_CS 1
@@ -244,7 +237,6 @@
 #endif // ESP_DISPLAY_4INCH
 
 #ifdef T_DISPLAY_S3
-#define MONITOR USBSerial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_CS 6
@@ -275,7 +267,6 @@
 #endif // T_DISPLAY_S3
 
 #ifdef S3_T_QT
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 0
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -299,7 +290,6 @@
 #endif // S3_T_QT
 
 #ifdef M5STACK_S3_ATOM
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI3_HOST
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
@@ -323,7 +313,6 @@
 #endif // M5STACK_S3_ATOM
 
 #ifdef T_RGB
-#define MONITOR USBSerial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 
@@ -372,7 +361,6 @@
 #endif // T_RGB
 
 #ifdef SUNTON_7INCH
-#define MONITOR Serial
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
 #define LCD_PIN_NUM_DE 41
@@ -422,7 +410,6 @@
 
 #ifdef HELTEC_WIFI_KIT_V2
 #include <ssd1306_surface_adapter.hpp>
-#define MONITOR Serial
 #define LCD_I2C_HOST    0
 #define LCD_I2C_ADDR 0x3C
 #define LCD_CONTROL_PHASE_BYTES 1
@@ -449,7 +436,6 @@
 #endif // HELTEC_WIFI_KIT_V2
 
 #ifdef ESP_USB_OTG
-#define MONITOR Serial
 #define LCD_SPI_HOST    SPI2_HOST
 #define LCD_BCKL_ON_LEVEL 1
 #define LCD_BCKL_OFF_LEVEL !LCD_BCKL_ON_LEVEL
