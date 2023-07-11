@@ -8,10 +8,6 @@
 #include "freertos/task.h"
 extern "C" void app_main();
 #endif
-// required to import the actual definitions
-// for lcd_init.h
-#define LCD_IMPLEMENTATION
-#include <lcd_init.h>
 #include <uix.hpp>
 using namespace gfx;
 using namespace uix;
@@ -32,33 +28,13 @@ static int old_gpu_temp=-1;
 // signal timer for disconnection detection
 static uint32_t timeout_ts = 0;
 
+// indicated the connection status
+static bool connected = false;
+
 #ifdef M5STACK_CORE2
 m5core2_power power;
 #endif
 
-// only needed if not RGB interface screen
-#ifndef LCD_PIN_NUM_VSYNC
-static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, 
-                            esp_lcd_panel_io_event_data_t* edata, 
-                            void* user_ctx) {
-    main_screen.set_flush_complete();
-    return true;
-}
-#endif
-
-static void uix_flush(const rect16& bounds, 
-                    const void* bmp, 
-                    void* state) {
-    lcd_panel_draw_bitmap(bounds.x1, 
-                        bounds.y1, 
-                        bounds.x2, 
-                        bounds.y2,
-                        (void*) bmp);
-    // if RGB, no DMA, so we are done once the above completes
-#ifdef LCD_PIN_NUM_VSYNC
-    main_screen.set_flush_complete();
-#endif
-}
 static uint32_t get_ms() {
 #ifdef ARDUINO
     return millis();
@@ -81,23 +57,22 @@ static size_t serial_read_bytes(uint8_t* buf, size_t len) {
 #endif
 }
 void update_all() {
-// timeout for disconnection detection (1 second)
+    // timeout for disconnection detection (1 second)
     if(timeout_ts!=0 && get_ms()>timeout_ts+1000) {
         timeout_ts = 0;
-        disconnected_label.visible(true);
-        disconnected_svg.visible(true);
+        display_screen(disconnected_screen);
+        connected = false;
     }
-    // update the UI
-    main_screen.update();
-
     // listen for incoming serial
     int i = serial_getch();
     float tmp;
     if(i>-1) { // if data received...
         // reset the disconnect timeout
         timeout_ts = get_ms(); 
-        disconnected_label.visible(false);
-        disconnected_svg.visible(false);
+        if(!connected) {
+            display_screen(main_screen);
+            connected = true;
+        }
         switch(i) {
             case read_status_t::command: {
                 read_status_t data;
@@ -166,17 +141,17 @@ void update_all() {
                 break;
         };
     }
+    display_update();
 }
 void initialize_common() {
-        // RGB interface LCD init is slightly different
-#ifdef LCD_PIN_NUM_VSYNC
-    lcd_panel_init();
-#else
-    lcd_panel_init(lcd_buffer_size,lcd_flush_ready);
-#endif
+    display_init();
+    // initialize the disconnected screen (ui.cpp)
+    disconnected_screen_init();
+    
     // initialize the main screen (ui.cpp)
-    main_screen_init(uix_flush);
+    main_screen_init();
 
+    display_screen(disconnected_screen);
 }
 #ifdef ARDUINO
 void setup() {

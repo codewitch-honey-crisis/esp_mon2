@@ -190,6 +190,10 @@ static void draw_graph(canvas_t::control_surface_type& destination,
         }
     }
 }
+
+screen_t main_screen(lcd_buffer_size,lcd_buffer1,lcd_buffer2);
+screen_t disconnected_screen(lcd_buffer_size,lcd_buffer1,lcd_buffer2);
+
 // define the declarations from the header
 buffer_t cpu_buffers[2];
 rgba_pixel<32> cpu_colors[] = {color32_t::light_blue, rgba_pixel<32>()};
@@ -199,18 +203,6 @@ buffer_t gpu_buffers[2];
 rgba_pixel<32> gpu_colors[] = {color32_t::light_blue, rgba_pixel<32>()};
 float gpu_values[] = {0.0f, 0.0f};
 int gpu_max_temp = 1;
-
-// define our transfer buffer(s) and initialize
-// the main screen with it/them.
-// for RGB interface screens we only use one
-// because there is no DMA
-static uint8_t lcd_buffer1[lcd_buffer_size];
-#ifndef LCD_PIN_NUM_VSYNC
-static uint8_t lcd_buffer2[lcd_buffer_size];
-screen_t main_screen(lcd_buffer_size, lcd_buffer1, lcd_buffer2);
-#else
-screen_t main_screen(lcd_buffer_size, lcd_buffer1, nullptr);
-#endif
 
 // define our CPU controls and state
 label_t cpu_label(main_screen);
@@ -229,18 +221,15 @@ static bar_info_t gpu_bar_state;
 static graph_info_t gpu_graph_state;
 
 // define our disconnected controls
-svg_box_t disconnected_svg(main_screen);
-label_t disconnected_label(main_screen);
+svg_box_t disconnected_svg(disconnected_screen);
+label_t disconnected_label(disconnected_screen);
 
 // initialize the main screen
-void main_screen_init(screen_t::on_flush_callback_type flush_callback, 
-                    void* flush_callback_state) {
+void main_screen_init() {
     // declare a transparent pixel/color
     rgba_pixel<32> transparent(0, 0, 0, 0);
     // screen is black
     main_screen.background_color(color_t::black);
-    // set the flush callback
-    main_screen.on_flush_callback(flush_callback, flush_callback_state);
 
     // declare the first label. Everything else is based on this.
     // to do so we measure the size of the text (@ 1/7th of 
@@ -337,16 +326,18 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback,
     gpu_graph_state.buffers = gpu_buffers;
     gpu_graph.on_paint(draw_graph, &gpu_graph_state);
     main_screen.register_control(gpu_graph);
+}
 
-    disconnected_label.bounds(main_screen.bounds());
+void disconnected_screen_init() {
+    disconnected_label.bounds(disconnected_screen.bounds());
     disconnected_label.background_color(color32_t::white);
     disconnected_label.border_color(color32_t::white);
-    main_screen.register_control(disconnected_label);
+    disconnected_screen.register_control(disconnected_label);
     // here we center and scale the SVG control based on
     // the size of the screen, clamped to a max of 128x128
     float sscale;
-    if(main_screen.dimensions().width<128 || main_screen.dimensions().height<128) {
-        sscale = disconnected_icon.scale(main_screen.dimensions());
+    if(disconnected_screen.dimensions().width<128 || disconnected_screen.dimensions().height<128) {
+        sscale = disconnected_icon.scale(disconnected_screen.dimensions());
     } else {
         sscale = disconnected_icon.scale(size16(128,128));
     }
@@ -354,7 +345,7 @@ void main_screen_init(screen_t::on_flush_callback_type flush_callback,
                                     0,
                                     disconnected_icon.dimensions().width*sscale-1,
                                     disconnected_icon.dimensions().height*sscale-1)
-                                        .center(main_screen.bounds()));
+                                        .center(disconnected_screen.bounds()));
     disconnected_svg.doc(&disconnected_icon);
-    main_screen.register_control(disconnected_svg);
+    disconnected_screen.register_control(disconnected_svg);
 }

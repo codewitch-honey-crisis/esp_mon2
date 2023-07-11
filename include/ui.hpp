@@ -1,11 +1,7 @@
 #pragma once
-#include <lcd_config.h>
+#include <display.hpp>
 #include <uix.hpp>
 #include <gfx.hpp>
-//#include <circular_buffer.hpp>
-// declare the types for our controls and other things
-using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
-                            LCD_FRAME_ADAPTER,LCD_X_ALIGN,LCD_Y_ALIGN>;
 
 using label_t = uix::label<typename screen_t::control_surface_type>;
 using svg_box_t = uix::svg_box<typename screen_t::control_surface_type>;
@@ -34,17 +30,11 @@ extern int gpu_max_temp;
 // the colors for the GPU bar and graph
 extern gfx::rgba_pixel<32> gpu_colors[];
 
-// for most screens, we declare two 32kB buffers which
-// we swap out for DMA. For RGB screens, DMA is not
-// used so we put 64kB in one buffer
-#ifndef LCD_PIN_NUM_VSYNC
-constexpr static const int lcd_buffer_size = 32 * 1024;
-#else
-constexpr static const int lcd_buffer_size = 64 * 1024;
-#endif
-
 // the screen that holds the controls
 extern screen_t main_screen;
+
+// the disconnected screen
+extern screen_t disconnected_screen;
 
 // the controls for the CPU
 extern label_t cpu_label;
@@ -58,9 +48,9 @@ extern label_t gpu_temp_label;
 extern canvas_t gpu_bar;
 extern canvas_t gpu_graph;
 
-// the controls for the disconnected "screen"
+// the controls for the disconnected screen
 extern label_t disconnected_label;
 extern svg_box_t disconnected_svg;
 
-extern void main_screen_init(screen_t::on_flush_callback_type flush_callback, 
-                            void* flush_callback_state = nullptr);
+extern void main_screen_init();
+extern void disconnected_screen_init();

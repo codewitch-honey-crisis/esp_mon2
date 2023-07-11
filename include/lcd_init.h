@@ -593,21 +593,26 @@ static inline void* lcd_heap_alloc(size_t length) { return heap_caps_malloc(leng
 static inline void* lcd_heap_alloc_dma(size_t length) { return heap_caps_malloc((length + 3) & ~3, MALLOC_CAP_DMA); }
 static inline void* lcd_heap_alloc_psram(size_t length) { return heap_caps_malloc((length + 3) & ~3, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT); }
 static inline void lcd_heap_free(void* buf) { heap_caps_free(buf); }
-
+static int min_uint32(uint32_t lhs,uint32_t rhs) {
+    return lhs<=rhs?lhs:rhs;
+}
+static int max_uint32(uint32_t lhs,uint32_t rhs) {
+    return lhs>rhs?lhs:rhs;
+}
 static void lcd_calc_clock_div(uint32_t* div_a, uint32_t* div_b, uint32_t* div_n, uint32_t* clkcnt, uint32_t baseClock, uint32_t targetFreq) {
     uint32_t diff = INT32_MAX;
     *div_n = 256;
     *div_a = 63;
     *div_b = 62;
     *clkcnt = 64;
-    uint32_t start_cnt = min(64u, (baseClock / (targetFreq * 2) + 1));
-    uint32_t end_cnt = max(2u, baseClock / 256u / targetFreq);
+    uint32_t start_cnt = min_uint32(64u, (baseClock / (targetFreq * 2) + 1));
+    uint32_t end_cnt = max_uint32(2u, baseClock / 256u / targetFreq);
     if (start_cnt <= 2) {
         end_cnt = 1;
     }
     for (uint32_t cnt = start_cnt; diff && cnt >= end_cnt; --cnt) {
         float fdiv = (float)baseClock / cnt / targetFreq;
-        uint32_t n = max(2u, (uint32_t)fdiv);
+        uint32_t n = max_uint32(2u, (uint32_t)fdiv);
         fdiv -= n;
 
         for (uint32_t a = 63; diff && a > 0; --a) {
@@ -846,7 +851,7 @@ bool lcd_panel_init() {
     uint32_t div_a, div_b, div_n, clkcnt;
     lcd_calc_clock_div(&div_a, &div_b, &div_n, &clkcnt, 240 * 1000 * 1000, LCD_PIXEL_CLOCK_HZ < 40000000u ? LCD_PIXEL_CLOCK_HZ : 40000000u);
     typeof(dev->lcd_clock) lcd_clock;
-    lcd_clock.lcd_clkcnt_n = max(1u, clkcnt - 1);
+    lcd_clock.lcd_clkcnt_n = max_uint32(1u, clkcnt - 1);
     lcd_clock.lcd_clk_equ_sysclk = (clkcnt == 1);
     lcd_clock.lcd_ck_idle_edge = false;
     lcd_clock.lcd_ck_out_edge = LCD_CLK_IDLE_HIGH;
