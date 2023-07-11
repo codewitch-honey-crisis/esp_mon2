@@ -186,7 +186,7 @@ void loop_task(void* state) {
 void app_main() {
     // open stdin as binary
     freopen(NULL, "rb", stdin);
-    #ifdef T_DISPLAY_S3
+#ifdef T_DISPLAY_S3
     gpio_set_direction((gpio_num_t)15,GPIO_MODE_OUTPUT);
     gpio_set_level((gpio_num_t)15,1);
 #elif defined(S3_T_QT)
