@@ -6,6 +6,7 @@
 #include "esp_lcd_panel_ops.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/gpio.h"
 extern "C" void app_main();
 #endif
 #include <uix.hpp>
@@ -40,6 +41,13 @@ static uint32_t get_ms() {
     return millis();
 #else
     return ((uint32_t)pdTICKS_TO_MS(xTaskGetTickCount()));
+#endif
+}
+static void serial_init() {
+#ifdef ARDUINO
+    Serial.begin(115200);
+#else
+    
 #endif
 }
 static int serial_getch() {

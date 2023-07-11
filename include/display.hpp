@@ -1,5 +1,7 @@
 #pragma once
+#if __has_include(<Arduino.h>)
 #include <Arduino.h>
+#endif
 #include <gfx.hpp>
 #ifdef ESP_PLATFORM
 #include <lcd_config.h>
