@@ -20,16 +20,23 @@ using lcd_t = ili9341<LCD_DC,LCD_RESET,LCD_BACKLIGHT,bus_t,3,true,400,200>;
 #define LCD_HEIGHT 240
 #define LCD_FRAME_ADAPTER gfx::bitmap<gfx::rgb_pixel<LCD_BIT_DEPTH>>
 #endif
+#define LCD_TRANSFER_KB 48
+
+// here we compute how many bytes are needed in theory to store the total screen.
+constexpr static const size_t lcd_screen_total_size = gfx::bitmap<typename LCD_FRAME_ADAPTER::pixel_type>::sizeof_buffer(LCD_WIDTH,LCD_HEIGHT);
 // define our transfer buffer(s) and initialize
 // the main screen with it/them.
 // for RGB interface screens we only use one
-// because there is no DMA
+// because there is no DMA. 
+// our buffer size is either LCD_TRANSFER_KB 
+// or the lcd_screen_total_size - whatever
+// is smaller
 #ifdef LCD_DMA
-constexpr static const size_t lcd_buffer_size = 32*1024;
+constexpr static const size_t lcd_buffer_size = (LCD_TRANSFER_KB*1024)>lcd_screen_total_size?lcd_screen_total_size:(LCD_TRANSFER_KB*1024);
 extern uint8_t lcd_buffer1[];
 extern uint8_t lcd_buffer2[];
 #else
-constexpr static const size_t lcd_buffer_size = 32*1024*2;
+constexpr static const size_t lcd_buffer_size = (LCD_TRANSFER_KB*1024*2)>lcd_screen_total_size?lcd_screen_total_size:(LCD_TRANSFER_KB*1024*2);
 extern uint8_t lcd_buffer1[];
 static uint8_t* const lcd_buffer2 = nullptr;
 #endif
