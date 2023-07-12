@@ -20,7 +20,7 @@ using lcd_t = ili9341<LCD_DC,LCD_RESET,LCD_BACKLIGHT,bus_t,3,true,400,200>;
 #define LCD_HEIGHT 240
 #define LCD_FRAME_ADAPTER gfx::bitmap<gfx::rgb_pixel<LCD_BIT_DEPTH>>
 #endif
-#define LCD_TRANSFER_KB 48
+#define LCD_TRANSFER_KB 32
 
 // here we compute how many bytes are needed in theory to store the total screen.
 constexpr static const size_t lcd_screen_total_size = gfx::bitmap<typename LCD_FRAME_ADAPTER::pixel_type>::sizeof_buffer(LCD_WIDTH,LCD_HEIGHT);

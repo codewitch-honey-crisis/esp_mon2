@@ -1149,7 +1149,6 @@ bool lcd_panel_init(size_t max_transfer_size, esp_lcd_panel_io_color_trans_done_
     ESP_ERROR_CHECK(i2c_param_config(LCD_I2C_HOST, &i2c_conf));
     ESP_ERROR_CHECK(i2c_driver_install(LCD_I2C_HOST, I2C_MODE_MASTER, 0, 0, 0));
 
-   ESP_LOGI(TAG, "Install panel IO");
     esp_lcd_panel_io_handle_t io_handle = NULL;
     esp_lcd_panel_io_i2c_config_t io_config;
     memset(&io_config,0,sizeof(esp_lcd_panel_io_i2c_config_t));
