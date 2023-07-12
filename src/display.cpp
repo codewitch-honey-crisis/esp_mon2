@@ -58,9 +58,11 @@ void display_init() {
 void display_init() {
     lcd.initialize();
 }
+#ifdef LCD_DMA
 void uix_wait(void* state) {
     gfx::draw::wait_all_async(lcd);
 }
+#endif
 void uix_flush(const gfx::rect16& bounds, 
                     const void* bmp, 
                     void* state) {
@@ -85,7 +87,9 @@ void display_screen(screen_t& new_screen) {
     active_screen = &new_screen;
     active_screen->on_flush_callback(uix_flush);
 #ifndef ESP_PLATFORM
+#ifdef LCD_DMA
     active_screen->wait_flush_callback(uix_wait);
+#endif
 #endif
     active_screen->invalidate();
 

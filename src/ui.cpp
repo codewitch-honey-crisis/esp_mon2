@@ -129,7 +129,7 @@ static void draw_graph(canvas_t::control_surface_type& destination,
     // store the dimensions
     const uint16_t width = destination.dimensions().width;
     const uint16_t height = destination.dimensions().height;
-    spoint16 pt;
+    spoint16 pt=spoint16::zero();
     // for each graph
     for (size_t i = 0; i < inf.size; ++i) {
         // easy access to the current buffer
