@@ -110,6 +110,8 @@ void display_update() {
         if(dirty) {
             gfx::draw::resume(epd);
         }
+#else
+        active_screen->update();
 #endif
     }
 }
