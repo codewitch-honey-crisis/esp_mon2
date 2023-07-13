@@ -1,10 +1,19 @@
+#ifndef E_PAPER
 #ifdef ESP_PLATFORM
 #define LCD_IMPLEMENTATION
 #include <lcd_init.h>
 #endif
+#endif
 #include <display.hpp>
 #ifndef ESP_PLATFORM
 static lcd_t lcd;
+#endif
+#ifdef E_PAPER
+#ifdef ARDUINO
+arduino::lilygot54in7 epd;
+#else
+esp_idf::lilygot54in7 epd;
+#endif
 #endif
 // define our transfer buffer(s) and initialize
 // the main screen with it/them.
@@ -19,7 +28,7 @@ uint8_t lcd_buffer1[lcd_buffer_size];
 
 screen_t* active_screen = nullptr;
 
-#ifdef ESP_PLATFORM
+#if defined(ESP_PLATFORM) && !defined(E_PAPER)
 #ifdef LCD_DMA
 // only needed if DMA enabled
 static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io, 
@@ -55,7 +64,17 @@ void display_init() {
 }
 #else
 void display_init() {
+#ifndef E_PAPER
     lcd.initialize();
+#ifdef LCD_ROTATION
+    lcd.rotation(LCD_ROTATION);
+#endif
+#else
+    epd.initialize();
+#ifdef LCD_ROTATION
+    epd.rotation(LCD_ROTATION);
+#endif
+#endif
 }
 #ifdef LCD_DMA
 void uix_wait(void* state) {
@@ -67,7 +86,11 @@ void uix_flush(const gfx::rect16& bounds,
                     void* state) {
     if(active_screen!=nullptr) {
         gfx::const_bitmap<screen_t::pixel_type,screen_t::palette_type> cbmp(bounds.dimensions(),bmp,active_screen->palette());
+#ifndef E_PAPER
         gfx::draw::bitmap_async(lcd,bounds,cbmp,cbmp.bounds());
+#else
+        gfx::draw::bitmap_async(epd,bounds,cbmp,cbmp.bounds());
+#endif
 #ifndef LCD_DMA
         active_screen->set_flush_complete();
 #endif
@@ -77,7 +100,17 @@ void uix_flush(const gfx::rect16& bounds,
 
 void display_update() {
     if(active_screen!=nullptr) {
+#ifdef E_PAPER
+        bool dirty = active_screen->is_dirty();
+        if(dirty) {
+            gfx::draw::suspend(epd);
+            epd.invalidate();
+        }
         active_screen->update();
+        if(dirty) {
+            gfx::draw::resume(epd);
+        }
+#endif
     }
 }
 

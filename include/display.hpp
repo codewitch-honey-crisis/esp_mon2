@@ -3,8 +3,10 @@
 #include <Arduino.h>
 #endif
 #include <gfx.hpp>
+#ifndef E_PAPER
 #ifdef ESP_PLATFORM
 #include <lcd_config.h>
+#endif
 #endif
 #ifdef WIO_TERMINAL
 #include <tft_spi.hpp>
@@ -18,7 +20,23 @@ using lcd_t = ili9341<LCD_DC,LCD_RESET,LCD_BACKLIGHT,bus_t,3,true,400,200>;
 #define LCD_WIDTH 320
 #define LCD_HEIGHT 240
 #define LCD_FRAME_ADAPTER gfx::bitmap<gfx::rgb_pixel<LCD_BIT_DEPTH>>
+#endif // WIO_TERMINAL
+#ifdef T5_4_7
+#include <lilygot54in7.hpp>
+#ifdef ARDUINO
+extern arduino::lilygot54in7 epd;
+#else
+extern esp_idf::lilygot54in7 epd;
 #endif
+#define LCD_BIT_DEPTH 4
+#define LCD_X_ALIGN 1
+#define LCD_Y_ALIGN 1
+#define LCD_WIDTH 960
+#define LCD_HEIGHT 540
+#define LCD_ROTATION 1
+#define LCD_FRAME_ADAPTER gfx::bitmap<gfx::gsc_pixel<LCD_BIT_DEPTH>>
+
+#endif // T5_4_7
 #define LCD_TRANSFER_KB 64
 
 // here we compute how many bytes are needed in theory to store the total screen.
