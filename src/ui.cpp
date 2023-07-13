@@ -144,7 +144,7 @@ static void draw_graph(canvas_t::control_surface_type& destination,
         if (!buf.empty()) {
             // get and store the first value
             // (translating it to the graph)
-            v = *buf.peek(0);
+            v = *buf.peek(0)/255.0f;
             pt.x = 0;
             pt.y = height - (v * height) - 1;
             if (pt.y < 0) pt.y = 0;
@@ -152,7 +152,7 @@ static void draw_graph(canvas_t::control_surface_type& destination,
         // for each subsequent value
         for (size_t i = 1; i < buf.size(); ++i) {
             // retrieve the value
-            v = *buf.peek(i);
+            v = *buf.peek(i)/255.0f;
             // if it's a gradient
             if (grad) {
                 // get our anchors for the ends

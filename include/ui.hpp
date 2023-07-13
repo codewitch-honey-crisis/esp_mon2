@@ -11,7 +11,7 @@ using color_t = gfx::color<typename screen_t::pixel_type>;
 // RGBA8888 X11 colors (used for controls)
 using color32_t = gfx::color<gfx::rgba_pixel<32>>;
 // circular buffer for graphs
-using buffer_t = data::circular_buffer<float,100>;
+using buffer_t = data::circular_buffer<uint8_t,100>;
 
 // the buffers hold the graph data for the CPU
 extern buffer_t cpu_buffers[];

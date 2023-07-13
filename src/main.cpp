@@ -69,7 +69,7 @@ void update_all() {
     bool done = false;
     while(!done) {
         int i = serial_getch();
-        float tmp;    
+        uint8_t tmp;    
         if(i>-1) { // if data received...
             // reset the disconnect timeout
             timeout_ts = get_ms(); 
@@ -85,14 +85,14 @@ void update_all() {
                         if (cpu_buffers[0].full()) {
                             cpu_buffers[0].get(&tmp);
                         }
-                        cpu_buffers[0].put(data.cpu_usage/100.0f);
+                        cpu_buffers[0].put((data.cpu_usage/100.0f)*255);
                         // update the bar and label values (usage)
                         cpu_values[0]=data.cpu_usage/100.0f;
                         // update the CPU graph buffer (temperature)
                         if (cpu_buffers[1].full()) {
                             cpu_buffers[1].get(&tmp);
                         }
-                        cpu_buffers[1].put(data.cpu_temp/(float)data.cpu_temp_max);
+                        cpu_buffers[1].put((data.cpu_temp/(float)data.cpu_temp_max)*255);
                         if(data.cpu_temp>cpu_max_temp) {
                             cpu_max_temp = data.cpu_temp;
                         }
@@ -111,14 +111,14 @@ void update_all() {
                         if (gpu_buffers[0].full()) {
                             gpu_buffers[0].get(&tmp);
                         }
-                        gpu_buffers[0].put(data.gpu_usage/100.0f);
+                        gpu_buffers[0].put((data.gpu_usage/100.0f)*255);
                         // update the bar and label values (usage)
                         gpu_values[0] = data.gpu_usage/100.0f;
                         // update the GPU graph buffer (temperature)
                         if (gpu_buffers[1].full()) {
                             gpu_buffers[1].get(&tmp);
                         }
-                        gpu_buffers[1].put(data.gpu_temp/(float)data.gpu_temp_max);
+                        gpu_buffers[1].put((data.gpu_temp/(float)data.gpu_temp_max)*255);
                         if(data.gpu_temp>gpu_max_temp) {
                             gpu_max_temp = data.gpu_temp;
                         }
