@@ -66,82 +66,87 @@ void update_all() {
         connected = false;
     }
     // listen for incoming serial
-    int i = serial_getch();
-    float tmp;
-    if(i>-1) { // if data received...
-        // reset the disconnect timeout
-        timeout_ts = get_ms(); 
-        if(!connected) {
-            display_screen(main_screen);
-            connected = true;
-        }
-        switch(i) {
-            case read_status_t::command: {
-                read_status_t data;
-                if(sizeof(data)==serial_read_bytes((uint8_t*)&data,sizeof(data))) {
-                    // update the CPU graph buffer (usage)
-                    if (cpu_buffers[0].full()) {
-                        cpu_buffers[0].get(&tmp);
-                    }
-                    cpu_buffers[0].put(data.cpu_usage/100.0f);
-                    // update the bar and label values (usage)
-                    cpu_values[0]=data.cpu_usage/100.0f;
-                    // update the CPU graph buffer (temperature)
-                    if (cpu_buffers[1].full()) {
-                        cpu_buffers[1].get(&tmp);
-                    }
-                    cpu_buffers[1].put(data.cpu_temp/(float)data.cpu_temp_max);
-                    if(data.cpu_temp>cpu_max_temp) {
-                        cpu_max_temp = data.cpu_temp;
-                    }
-                    // update the bar and label values (temperature)
-                    cpu_values[1]=data.cpu_temp/(float)data.cpu_temp_max;
-                    // force a redraw of the CPU bar and graph
-                    cpu_graph.invalidate();
-                    cpu_bar.invalidate();
-                    // update CPU the label (temperature)
-                    if(old_cpu_temp!=data.cpu_temp) {
-                        old_cpu_temp = data.cpu_temp;
-                        sprintf(cpu_sz,"%dC",data.cpu_temp);
-                        cpu_temp_label.text(cpu_sz);
-                    }
-                    // update the GPU graph buffer (usage)
-                    if (gpu_buffers[0].full()) {
-                        gpu_buffers[0].get(&tmp);
-                    }
-                    gpu_buffers[0].put(data.gpu_usage/100.0f);
-                    // update the bar and label values (usage)
-                    gpu_values[0] = data.gpu_usage/100.0f;
-                    // update the GPU graph buffer (temperature)
-                    if (gpu_buffers[1].full()) {
-                        gpu_buffers[1].get(&tmp);
-                    }
-                    gpu_buffers[1].put(data.gpu_temp/(float)data.gpu_temp_max);
-                    if(data.gpu_temp>gpu_max_temp) {
-                        gpu_max_temp = data.gpu_temp;
-                    }
-                    // update the bar and label values (temperature)
-                    gpu_values[1] = data.gpu_temp/(float)data.gpu_temp_max;
-                    // force a redraw of the GPU bar and graph
-                    gpu_graph.invalidate();
-                    gpu_bar.invalidate();
-                    // update GPU the label (temperature)
-                    if(old_gpu_temp!=data.gpu_temp) {
-                        old_gpu_temp = data.gpu_temp;
-                        sprintf(gpu_sz,"%dC",data.gpu_temp);
-                        gpu_temp_label.text(gpu_sz);   
-                    }
-                } else {
-                    // eat bad data
-                    while(-1!=serial_getch());
-                }
+    bool done = false;
+    while(!done) {
+        int i = serial_getch();
+        float tmp;    
+        if(i>-1) { // if data received...
+            // reset the disconnect timeout
+            timeout_ts = get_ms(); 
+            if(!connected) {
+                display_screen(main_screen);
+                connected = true;
             }
-            break;
-            default:
-                // eat unrecognized data
-                while(-1!=serial_getch());
+            switch(i) {
+                case read_status_t::command: {
+                    read_status_t data;
+                    if(sizeof(data)==serial_read_bytes((uint8_t*)&data,sizeof(data))) {
+                        // update the CPU graph buffer (usage)
+                        if (cpu_buffers[0].full()) {
+                            cpu_buffers[0].get(&tmp);
+                        }
+                        cpu_buffers[0].put(data.cpu_usage/100.0f);
+                        // update the bar and label values (usage)
+                        cpu_values[0]=data.cpu_usage/100.0f;
+                        // update the CPU graph buffer (temperature)
+                        if (cpu_buffers[1].full()) {
+                            cpu_buffers[1].get(&tmp);
+                        }
+                        cpu_buffers[1].put(data.cpu_temp/(float)data.cpu_temp_max);
+                        if(data.cpu_temp>cpu_max_temp) {
+                            cpu_max_temp = data.cpu_temp;
+                        }
+                        // update the bar and label values (temperature)
+                        cpu_values[1]=data.cpu_temp/(float)data.cpu_temp_max;
+                        // force a redraw of the CPU bar and graph
+                        cpu_graph.invalidate();
+                        cpu_bar.invalidate();
+                        // update CPU the label (temperature)
+                        if(old_cpu_temp!=data.cpu_temp) {
+                            old_cpu_temp = data.cpu_temp;
+                            sprintf(cpu_sz,"%dC",data.cpu_temp);
+                            cpu_temp_label.text(cpu_sz);
+                        }
+                        // update the GPU graph buffer (usage)
+                        if (gpu_buffers[0].full()) {
+                            gpu_buffers[0].get(&tmp);
+                        }
+                        gpu_buffers[0].put(data.gpu_usage/100.0f);
+                        // update the bar and label values (usage)
+                        gpu_values[0] = data.gpu_usage/100.0f;
+                        // update the GPU graph buffer (temperature)
+                        if (gpu_buffers[1].full()) {
+                            gpu_buffers[1].get(&tmp);
+                        }
+                        gpu_buffers[1].put(data.gpu_temp/(float)data.gpu_temp_max);
+                        if(data.gpu_temp>gpu_max_temp) {
+                            gpu_max_temp = data.gpu_temp;
+                        }
+                        // update the bar and label values (temperature)
+                        gpu_values[1] = data.gpu_temp/(float)data.gpu_temp_max;
+                        // force a redraw of the GPU bar and graph
+                        gpu_graph.invalidate();
+                        gpu_bar.invalidate();
+                        // update GPU the label (temperature)
+                        if(old_gpu_temp!=data.gpu_temp) {
+                            old_gpu_temp = data.gpu_temp;
+                            sprintf(gpu_sz,"%dC",data.gpu_temp);
+                            gpu_temp_label.text(gpu_sz);   
+                        }
+                    } else {
+                        // eat bad data
+                        while(-1!=serial_getch());
+                    }
+                }
                 break;
-        };
+                default:
+                    // eat unrecognized data
+                    while(-1!=serial_getch());
+                    break;
+            };
+        } else {
+            done = true;
+        }
     }
     display_update();
 }
