@@ -19,7 +19,6 @@ uint8_t lcd_buffer1[lcd_buffer_size];
 
 screen_t* active_screen = nullptr;
 
-
 #ifdef ESP_PLATFORM
 #ifdef LCD_DMA
 // only needed if DMA enabled
@@ -66,8 +65,13 @@ void uix_wait(void* state) {
 void uix_flush(const gfx::rect16& bounds, 
                     const void* bmp, 
                     void* state) {
-    gfx::const_bitmap<screen_t::pixel_type,screen_t::palette_type> cbmp(bounds.dimensions(),bmp);
-    gfx::draw::bitmap_async(lcd,bounds,cbmp,cbmp.bounds());
+    if(active_screen!=nullptr) {
+        gfx::const_bitmap<screen_t::pixel_type,screen_t::palette_type> cbmp(bounds.dimensions(),bmp,active_screen->palette());
+        gfx::draw::bitmap_async(lcd,bounds,cbmp,cbmp.bounds());
+#ifndef LCD_DMA
+        active_screen->set_flush_complete();
+#endif
+    }
 }
 #endif
 

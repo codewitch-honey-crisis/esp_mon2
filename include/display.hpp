@@ -12,7 +12,6 @@
 using namespace arduino;
 using bus_t = tft_spi_ex<3,LCD_SS_PIN,SPI_MODE0>;
 using lcd_t = ili9341<LCD_DC,LCD_RESET,LCD_BACKLIGHT,bus_t,3,true,400,200>;
-#define LCD_DMA
 #define LCD_BIT_DEPTH 16
 #define LCD_X_ALIGN 1
 #define LCD_Y_ALIGN 1
