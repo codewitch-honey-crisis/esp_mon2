@@ -15,10 +15,10 @@ arduino::lilygot54in7 epd;
 esp_idf::lilygot54in7 epd;
 #endif
 #endif
-// define our transfer buffer(s) and initialize
-// the main screen with it/them.
-// for RGB interface screens we only use one
-// because there is no DMA
+
+// our transfer buffers
+// For screens with no DMA we only 
+// have one buffer
 #ifdef LCD_DMA
 uint8_t lcd_buffer1[lcd_buffer_size];
 uint8_t lcd_buffer2[lcd_buffer_size];
@@ -26,6 +26,7 @@ uint8_t lcd_buffer2[lcd_buffer_size];
 uint8_t lcd_buffer1[lcd_buffer_size];
 #endif
 
+// the active screen
 screen_t* active_screen = nullptr;
 
 #if defined(ESP_PLATFORM) && !defined(E_PAPER)
