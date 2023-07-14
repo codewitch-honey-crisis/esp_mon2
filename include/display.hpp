@@ -35,8 +35,8 @@ extern esp_idf::lilygot54in7 epd;
 #define LCD_HEIGHT 540
 #define LCD_ROTATION 1
 #define LCD_FRAME_ADAPTER gfx::bitmap<gfx::gsc_pixel<LCD_BIT_DEPTH>>
-
 #endif // T5_4_7
+
 #define LCD_TRANSFER_KB 64
 
 // here we compute how many bytes are needed in theory to store the total screen.
