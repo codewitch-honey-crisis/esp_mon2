@@ -36,7 +36,7 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
                             esp_lcd_panel_io_event_data_t* edata, 
                             void* user_ctx) {
     if(active_screen!=nullptr) {
-        active_screen->set_flush_complete();
+        active_screen->flush_complete();
     }
     return true;
 }
@@ -52,7 +52,7 @@ static void uix_flush(const gfx::rect16& bounds,
     // no DMA, so we are done once the above completes
 #ifndef LCD_DMA
     if(active_screen!=nullptr) {
-        active_screen->set_flush_complete();
+        active_screen->flush_complete();
     }
 #endif
 }
@@ -93,7 +93,7 @@ void uix_flush(const gfx::rect16& bounds,
         gfx::draw::bitmap_async(epd,bounds,cbmp,cbmp.bounds());
 #endif
 #ifndef LCD_DMA
-        active_screen->set_flush_complete();
+        active_screen->flush_complete();
 #endif
     }
 }
@@ -102,7 +102,7 @@ void uix_flush(const gfx::rect16& bounds,
 void display_update() {
     if(active_screen!=nullptr) {
 #ifdef E_PAPER
-        bool dirty = active_screen->is_dirty();
+        bool dirty = active_screen->dirty();
         if(dirty) {
             gfx::draw::suspend(epd);
             epd.invalidate();

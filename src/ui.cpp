@@ -191,8 +191,8 @@ static void draw_graph(canvas_t::control_surface_type& destination,
     }
 }
 
-screen_t main_screen(lcd_buffer_size,lcd_buffer1,lcd_buffer2);
-screen_t disconnected_screen(lcd_buffer_size,lcd_buffer1,lcd_buffer2);
+screen_t main_screen({LCD_WIDTH,LCD_HEIGHT},lcd_buffer_size,lcd_buffer1,lcd_buffer2);
+screen_t disconnected_screen({LCD_WIDTH,LCD_HEIGHT},lcd_buffer_size,lcd_buffer1,lcd_buffer2);
 
 // define the declarations from the header
 buffer_t cpu_buffers[2];
@@ -270,7 +270,7 @@ void main_screen_init() {
     cpu_bar_state.size = 2;
     cpu_bar_state.colors = cpu_colors;
     cpu_bar_state.values = cpu_values;
-    cpu_bar.on_paint(draw_bar, &cpu_bar_state);
+    cpu_bar.on_paint_callback(draw_bar, &cpu_bar_state);
     main_screen.register_control(cpu_bar);
 
     // the graph is below the above items.
@@ -282,7 +282,7 @@ void main_screen_init() {
     cpu_graph_state.size = 2;
     cpu_graph_state.colors = cpu_colors;
     cpu_graph_state.buffers = cpu_buffers;
-    cpu_graph.on_paint(draw_graph, &cpu_graph_state);
+    cpu_graph.on_paint_callback(draw_graph, &cpu_graph_state);
     main_screen.register_control(cpu_graph);
 
     // the GPU label is offset from the CPU
@@ -316,7 +316,7 @@ void main_screen_init() {
     gpu_bar_state.size = 2;
     gpu_bar_state.colors = gpu_colors;
     gpu_bar_state.values = gpu_values;
-    gpu_bar.on_paint(draw_bar, &gpu_bar_state);
+    gpu_bar.on_paint_callback(draw_bar, &gpu_bar_state);
     main_screen.register_control(gpu_bar);
 
     gpu_graph.bounds(cpu_graph.bounds()
@@ -324,7 +324,7 @@ void main_screen_init() {
     gpu_graph_state.size = 2;
     gpu_graph_state.colors = gpu_colors;
     gpu_graph_state.buffers = gpu_buffers;
-    gpu_graph.on_paint(draw_graph, &gpu_graph_state);
+    gpu_graph.on_paint_callback(draw_graph, &gpu_graph_state);
     main_screen.register_control(gpu_graph);
 }
 

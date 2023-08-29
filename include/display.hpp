@@ -61,8 +61,7 @@ static uint8_t* const lcd_buffer2 = nullptr;
 #include <uix.hpp>
 
 // declare the screen type
-using screen_t = uix::screen_ex<LCD_WIDTH,LCD_HEIGHT,
-                            LCD_FRAME_ADAPTER,LCD_X_ALIGN,LCD_Y_ALIGN>;
+using screen_t = uix::screen_ex<LCD_FRAME_ADAPTER,LCD_X_ALIGN,LCD_Y_ALIGN>;
 
 // the active screen pointer
 extern screen_t* active_screen;
