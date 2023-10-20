@@ -226,6 +226,8 @@ label_t disconnected_label(disconnected_screen);
 
 // initialize the main screen
 void main_screen_init() {
+    uint16_t w = main_screen.dimensions().width,
+        h = main_screen.dimensions().height;
     // declare a transparent pixel/color
     rgba_pixel<32> transparent(0, 0, 0, 0);
     // screen is black
@@ -235,12 +237,14 @@ void main_screen_init() {
     // to do so we measure the size of the text (@ 1/7th of 
     // height of the screen) and bound the label based on that
     cpu_label.text("CPU");
-    cpu_label.text_line_height(main_screen.dimensions().height / 7);
-    cpu_label.bounds(text_font.measure_text(ssize16::max(), 
-                                spoint16::zero(), 
-                                cpu_label.text(), 
-                                text_font.scale(cpu_label.text_line_height()))
-                                    .bounds().offset(5, 5).inflate(8, 4));
+    cpu_label.text_line_height(h / 7);
+    cpu_label.bounds(text_font.measure_text(ssize16::max(),
+                                            spoint16::zero(),
+                                            cpu_label.text(),
+                                            text_font.scale(h / 7))
+                         .bounds()
+                         .offset(5, 5)
+                         .inflate(8, 4));
     // set the design properties
     cpu_label.text_color(color32_t::white);
     cpu_label.background_color(transparent);
@@ -252,20 +256,20 @@ void main_screen_init() {
 
     // the temp label is right below the first label
     cpu_temp_label.bounds(cpu_label.bounds()
-                            .offset(0, cpu_label.text_line_height() + 1));
+                              .offset(0, (h / 7) + 1));
     cpu_temp_label.text_color(color32_t::white);
     cpu_temp_label.background_color(transparent);
     cpu_temp_label.border_color(transparent);
     cpu_temp_label.text("0C");
     cpu_temp_label.text_justify(uix_justify::bottom_right);
     cpu_temp_label.text_open_font(&text_font);
-    cpu_temp_label.text_line_height(cpu_label.text_line_height());
+    cpu_temp_label.text_line_height((h / 7));
     main_screen.register_control(cpu_temp_label);
 
     // the bars are to the right of the label
     cpu_bar.bounds({int16_t(cpu_label.bounds().x2 + 5), 
                     cpu_label.bounds().y1, 
-                    int16_t(main_screen.dimensions().width - 5), 
+                    int16_t(w - 5), 
                     cpu_label.bounds().y2});
     cpu_bar_state.size = 2;
     cpu_bar_state.colors = cpu_colors;
@@ -277,7 +281,7 @@ void main_screen_init() {
     cpu_graph.bounds({cpu_bar.bounds().x1, 
                         int16_t(cpu_label.bounds().y2 + 5), 
                         cpu_bar.bounds().x2, 
-                        int16_t(main_screen.dimensions().height / 
+                        int16_t(h / 
                                     2 - 5)});
     cpu_graph_state.size = 2;
     cpu_graph_state.colors = cpu_colors;
@@ -287,31 +291,31 @@ void main_screen_init() {
 
     // the GPU label is offset from the CPU
     // label by half the height of the screen
-    gpu_label.bounds(cpu_label.bounds().offset(0, main_screen.dimensions().height / 2));
+    gpu_label.bounds(cpu_label.bounds().offset(0, h / 2));
     gpu_label.text_color(color32_t::white);
     gpu_label.border_color(transparent);
     gpu_label.background_color(transparent);
     gpu_label.text("GPU");
     gpu_label.text_justify(uix_justify::bottom_right);
     gpu_label.text_open_font(&text_font);
-    gpu_label.text_line_height(cpu_label.text_line_height());
+    gpu_label.text_line_height((h / 7));
     main_screen.register_control(gpu_label);
 
     // lay out the rest of the controls the 
     // same as was done with the CPU
-    gpu_temp_label.bounds(gpu_label.bounds().offset(0, gpu_label.text_line_height() + 1));
+    gpu_temp_label.bounds(gpu_label.bounds().offset(0, (h / 7) + 1));
     gpu_temp_label.text_color(color32_t::white);
     gpu_temp_label.background_color(transparent);
     gpu_temp_label.border_color(transparent);
     gpu_temp_label.text("0C");
     gpu_temp_label.text_justify(uix_justify::bottom_right);
     gpu_temp_label.text_open_font(&text_font);
-    gpu_temp_label.text_line_height(cpu_label.text_line_height());
+    gpu_temp_label.text_line_height((h / 7));
     main_screen.register_control(gpu_temp_label);
 
     gpu_bar.bounds({int16_t(gpu_label.bounds().x2 + 5), 
                     gpu_label.bounds().y1, 
-                    int16_t(main_screen.dimensions().width - 5), 
+                    int16_t(w - 5), 
                     gpu_label.bounds().y2});
     gpu_bar_state.size = 2;
     gpu_bar_state.colors = gpu_colors;
@@ -320,7 +324,7 @@ void main_screen_init() {
     main_screen.register_control(gpu_bar);
 
     gpu_graph.bounds(cpu_graph.bounds()
-                        .offset(0, main_screen.dimensions().height / 2));
+                        .offset(0, h / 2));
     gpu_graph_state.size = 2;
     gpu_graph_state.colors = gpu_colors;
     gpu_graph_state.buffers = gpu_buffers;
