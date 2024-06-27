@@ -102,8 +102,8 @@
 #define LCD_PIN_NUM_CS 5
 #define LCD_PIN_NUM_DC 15
 #define LCD_PANEL esp_lcd_new_panel_ili9342
-#define LCD_HRES 240
-#define LCD_VRES 320
+#define LCD_HRES 320
+#define LCD_VRES 240
 #define LCD_COLOR_SPACE ESP_LCD_COLOR_SPACE_BGR
 #define LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
 #define LCD_GAP_X 0
@@ -111,7 +111,7 @@
 #define LCD_MIRROR_X false
 #define LCD_MIRROR_Y false
 #define LCD_INVERT_COLOR true
-#define LCD_SWAP_XY true
+#define LCD_SWAP_XY false
 #endif // M5STACK_CORE2
 
 #ifdef M5STACK_FIRE
